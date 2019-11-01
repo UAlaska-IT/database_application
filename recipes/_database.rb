@@ -2,9 +2,8 @@
 
 tcb = 'database_application'
 
-local_db = node[tcb]['host'] == 'localhost'
-mariadb_server = node[tcb]['configure_mariadb'] && local_db
-postgresql_server = node[tcb]['configure_postgresql'] && local_db
+mariadb_server = node[tcb]['configure_mariadb'] && local_database?
+postgresql_server = node[tcb]['configure_postgresql'] && local_database?
 
 mariadb_server_install 'Server' do
   password(lazy { vault_default_secret(node[tcb]['root_pw']) }) if node[tcb]['set_root_pw']

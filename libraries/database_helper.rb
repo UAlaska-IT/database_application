@@ -5,6 +5,10 @@ module DatabaseApplication
   module Helper
     TCB = 'database_application'
 
+    def local_database?
+      return node[TCB]['host'] == 'localhost'
+    end
+
     def default_backup_directory
       dir = node[tcb]['backup']['directory']
       return dir if dir

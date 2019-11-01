@@ -2,14 +2,6 @@
 
 tcb = 'database_application'
 
-mariadb_client_install 'Client' do
-  only_if { node[tcb]['configure_mariadb'] }
-end
-
-postgresql_client_install 'Client' do
-  only_if { node[tcb]['configure_postgresql'] }
-end
-
 db_name = node[tcb]['db_name']
 
 mariadb_database db_name do

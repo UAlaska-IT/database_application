@@ -6,4 +6,4 @@ include_recipe "#{tcb}::_install"
 
 include_recipe "#{tcb}::_database"
 
-include_recipe "#{tcb}::_backup" if node[tcb]['database']['configure_backup']
+include_recipe "#{tcb}::_backup" if node[tcb]['configure_backup']

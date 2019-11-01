@@ -2,18 +2,18 @@
 
 tcb = 'database_application'
 
-local_db = node[tcb]['database']['host'] == 'localhost'
-mariadb_server = node[tcb]['database']['configure_mariadb'] && local_db
-postgresql_server = node[tcb]['database']['configure_postgresql'] && local_db
+local_db = node[tcb]['host'] == 'localhost'
+mariadb_server = node[tcb]['configure_mariadb'] && local_db
+postgresql_server = node[tcb]['configure_postgresql'] && local_db
 
 mariadb_server_install 'Server' do
-  password(lazy { vault_default_secret(node[tcb]['database']['root_pw']) }) if node[tcb]['database']['set_root_pw']
+  password(lazy { vault_default_secret(node[tcb]['root_pw']) }) if node[tcb]['set_root_pw']
   only_if { mariadb_server }
 end
 
 postgresql_server_install 'Server' do
-  initdb_locale node[tcb]['database']['postgresql']['locale']
-  password(lazy { vault_default_secret(node[tcb]['database']['root_pw']) }) if node[tcb]['database']['set_root_pw']
+  initdb_locale node[tcb]['postgresql']['locale']
+  password(lazy { vault_default_secret(node[tcb]['root_pw']) }) if node[tcb]['set_root_pw']
   only_if { postgresql_server }
 end
 
@@ -26,26 +26,26 @@ postgresql_server_conf 'Configuration' do
 end
 
 mariadb_client_install 'Client' do
-  only_if { node[tcb]['database']['configure_mariadb'] }
+  only_if { node[tcb]['configure_mariadb'] }
 end
 
 postgresql_client_install 'Client' do
-  only_if { node[tcb]['database']['configure_postgresql'] }
+  only_if { node[tcb]['configure_postgresql'] }
 end
 
-db_name = node[tcb]['database']['db_name']
+db_name = node[tcb]['db_name']
 
 mariadb_database db_name do
   only_if { mariadb_server }
 end
 
 postgresql_database db_name do
-  locale node[tcb]['database']['postgresql']['locale']
+  locale node[tcb]['postgresql']['locale']
   only_if { postgresql_server }
 end
 
-user = node[tcb]['database']['user_name']
-user_pw = vault_default_secret(node[tcb]['database']['user_pw'])
+user = node[tcb]['user_name']
+user_pw = vault_default_secret(node[tcb]['user_pw'])
 
 mariadb_user 'DB User' do
   username user

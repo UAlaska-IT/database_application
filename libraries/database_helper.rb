@@ -6,7 +6,7 @@ module DatabaseApplication
     TCB = 'database_application'
 
     def default_backup_directory
-      dir = node[TCB]['database']['backup']['directory']
+      dir = node[tcb]['backup']['directory']
       return dir if dir
 
       return File.join('/var/backups', node[TCB]['base_name'])
@@ -46,7 +46,7 @@ module DatabaseApplication
     end
 
     def s3_path(file)
-      s3 = "s3://#{node[TCB]['database']['backup']['s3_path']}"
+      s3 = "s3://#{node[tcb]['backup']['s3_path']}"
       s3 += '/' unless s3.match?(%r{/$})
       s3 += file
       return s3
@@ -65,7 +65,7 @@ module DatabaseApplication
       code = ''
       code += compress_command(db_name, time_stamp)
       code += copy_command(db_name, time_stamp)
-      code += s3_copy_command(db_name, time_stamp) if node[TCB]['database']['backup']['copy_to_s3']
+      code += s3_copy_command(db_name, time_stamp) if node[tcb]['backup']['copy_to_s3']
       return code
     end
 

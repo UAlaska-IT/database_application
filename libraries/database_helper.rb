@@ -13,6 +13,14 @@ module DatabaseApplication
       return node[TCB]['configure_firewall'] && !local_database?
     end
 
+    def mariadb_server?
+      return node[TCB]['mariadb']['databases'].any?
+    end
+
+    def postgresql_server?
+      return node[TCB]['postgresql']['databases'].any?
+    end
+
     def default_backup_directory
       dir = node[tcb]['backup']['directory']
       return dir if dir

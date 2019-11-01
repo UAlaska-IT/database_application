@@ -7,6 +7,7 @@ firewall_rule 'Allow MariaDB' do
   protocol :tcp
   position 1
   command :allow
+  only_if { mariadb_server? }
 end
 
 firewall_rule 'Allow PostreSQL' do
@@ -14,4 +15,5 @@ firewall_rule 'Allow PostreSQL' do
   protocol :tcp
   position 1
   command :allow
+  only_if { postgresql_server? }
 end

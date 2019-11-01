@@ -7,9 +7,10 @@ __Maintainer: OIT Systems Engineering__ (<ua-oit-se@alaska.edu>)
 This cookbook configures a multi-database server.
 Both MariaDB and PostgreSQL can be installed and databases created from a list in attributes.
 
-Automated dumps can be setup, as well as remote backup to AWS S3.
+The firewall can be configured for remote access, or not for local databases.
 
-A firewall can be configured for remote access, or not for local databases.
+Automated dumps can be setup, as well as remote backup to AWS S3.
+For remote backup to succeed, the node must be configured with a proper instance profile.
 
 ## Requirements
 

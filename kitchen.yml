@@ -20,6 +20,8 @@ provisioner:
   install_strategy: once
   attributes:
     database_application:
+    firewall:
+      allow_ssh: true
 
 verifier:
   name: inspec

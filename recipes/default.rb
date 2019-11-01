@@ -4,6 +4,8 @@ tcb = 'database_application'
 
 include_recipe "#{tcb}::_install"
 
+include_recipe "#{tcb}::_server"
+
 include_recipe "#{tcb}::_database"
 
 include_recipe "#{tcb}::_firewall" if configure_firewall?

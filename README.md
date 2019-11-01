@@ -1,4 +1,4 @@
-# LAMPP Platform Cookbook
+# Database Application Cookbook
 
 __Maintainer: OIT Systems Engineering__ (<ua-oit-se@alaska.edu>)
 

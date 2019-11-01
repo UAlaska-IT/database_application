@@ -1,0 +1,58 @@
+---
+driver:
+  name: ec2
+  region: us-west-1
+  instance_type: t3a.micro
+  security_group_ids: ['kitchen_test_sg']
+  tags:
+    Name: Database Application
+    Service: Infrastructure
+    Environment: Test
+    Fund: 103010
+    Org: 60412
+    Department: Systems Engineering
+
+provisioner:
+  name: chef_zero
+  always_update_cookbooks: true
+  product_name: chef
+  product_version: 15.4.45
+  install_strategy: once
+  attributes:
+    database_application:
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-18.04
+  - name: ubuntu-16.04
+  - name: ubuntu-14.04
+  - name: debian-9
+  - name: centos-7
+  - name: centos-6
+  - name: oracle-7.6
+  - name: oracle-6.10
+  - name: fedora-29
+  - name: fedora-28
+  - name: amazon2
+  - name: amazon2-2018
+  - name: sles-15
+  - name: windows-2019
+  - name: windows-2016
+  - name: windows-2012r2
+  - name: windows-2008r2sp1
+
+suites:
+  - name: default
+    run_list:
+      - recipe[chef_run_recorder::default]
+      - recipe[test_harness::default]
+    data_bags_path: 'test/data_bags'
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    includes:
+      - ubuntu-18.04
+      - centos-7

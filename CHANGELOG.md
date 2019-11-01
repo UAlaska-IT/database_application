@@ -1,4 +1,4 @@
-# Changelog for LAMPP Platform Cookbook
+# Changelog for Database Application Cookbook
 
 ## 0.1.0
 

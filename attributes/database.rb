@@ -6,6 +6,9 @@ default[tcb]['configure_mariadb'] = false
 default[tcb]['configure_postgresql'] = false
 default[tcb]['db_name'] = nil
 
+default[tcb]['mariadb']['databases'] = []
+default[tcb]['postgresql']['databases'] = []
+
 default[tcb]['postgresql']['locale'] = 'C.UTF-8'
 
 default[tcb]['host'] = 'localhost'

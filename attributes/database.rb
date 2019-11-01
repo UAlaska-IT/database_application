@@ -12,5 +12,5 @@ default[tcb]['postgresql']['databases'] = []
 default[tcb]['user_name'] = nil
 
 default[tcb]['user_pw']['vault_data_bag'] = 'passwords'
-default[tcb]['user_pw']['vault_bag_item'] = nil
+default[tcb]['user_pw']['vault_bag_item'] = 'database'
 default[tcb]['user_pw']['vault_item_key'] = 'db_user'

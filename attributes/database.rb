@@ -22,13 +22,3 @@ default[tcb]['root_pw']['vault_item_key'] = 'db_root'
 default[tcb]['user_pw']['vault_data_bag'] = 'passwords'
 default[tcb]['user_pw']['vault_bag_item'] = nil
 default[tcb]['user_pw']['vault_item_key'] = 'db_user'
-
-default[tcb]['configure_backup'] = true
-default[tcb]['backup']['directory'] = nil
-default[tcb]['backup']['weekday'] = '0'
-default[tcb]['backup']['day'] = '*'
-default[tcb]['backup']['hour'] = '4'
-
-default[tcb]['backup']['copy_to_s3'] = false
-default[tcb]['backup']['delete_local_copy'] = false
-default[tcb]['backup']['s3_path'] = nil

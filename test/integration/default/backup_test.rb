@@ -19,7 +19,7 @@ backup_script = '/var/chef/database_application_backup.sh'
 describe file backup_script do
   it { should exist }
   it { should be_file }
-  it { should be_mode '750' }
+  it { should be_mode 0o750 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
 end
@@ -29,7 +29,7 @@ cron_file = '/etc/cron.d/database_backup'
 describe file cron_file do
   it { should exist }
   it { should be_file }
-  it { should be_mode '600' }
+  it { should be_mode 0o600 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
   its(:content) { should match('-h localhost') }
@@ -70,7 +70,7 @@ time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')
     describe file time_file do
       it { should exist }
       it { should be_file }
-      it { should be_mode '640' }
+      it { should be_mode 0o640 }
       it { should be_owned_by 'root' }
       it { should be_grouped_into 'root' }
     end
@@ -79,7 +79,7 @@ time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')
     describe file latest_file do
       it { should exist }
       it { should be_file }
-      it { should be_mode '640' }
+      it { should be_mode 0o640 }
       it { should be_owned_by 'root' }
       it { should be_grouped_into 'root' }
     end

@@ -95,6 +95,26 @@ module DatabaseApplication
       return "\nrm #{latest_path}"
     end
 
+    def user_password_default(user_hash, key)
+      return user_hash[key] if user_hash.key?(key)
+
+      return node[TCB]['database']['user_pw'][key]
+    end
+
+    def user_password_key(user_name, user_hash)
+      return user_hash['vault_bag_item'] if user_hash.key?('vault_bag_item')
+
+      return user_name
+    end
+
+    def user_password(user_name)
+      user_hash = node[TCB]['database']['users'][user_name]
+      bag = user_password_default(user_hash, 'vault_data_bag')
+      item = user_password_default(user_hash, 'vault_bag_item')
+      key = user_password_key(user_name, user_hash)
+      return vault_secret(bag, item, key)
+    end
+
     def vault_secret(bag, item, key)
       # Will raise 404 error if not found
       item = chef_vault_item(

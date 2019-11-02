@@ -57,11 +57,13 @@ time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')
     latest_file = File.join(backup_dir, "backup_#{db_tag}_latest\\.sql\\.7z")
 
     describe file backup_script do
+      # rubocop:disable Style/RegexpLiteral
       its(:content) { should match(/#{db_name}(?: -c)? > '#{backup_dir}\/backup_#{db_tag}\.sql/) }
       its(:content) { should match(/7z a "#{timestamp_file}" '#{backup_dir}\/backup_#{db_tag}\.sql'/) }
       its(:content) { should match(/chmod 640 '#{backup_dir}\/backup_#{db_tag}\.sql'/) }
       its(:content) { should match(/chmod 640 "#{timestamp_file}"/) }
       its(:content) { should match(/cp "#{timestamp_file}" '#{latest_file}'/) }
+      # rubocop:enable Style/RegexpLiteral
     end
 
     time_file = File.join(backup_dir, "backup_#{db_tag}_#{time_stamp}.sql.7z")

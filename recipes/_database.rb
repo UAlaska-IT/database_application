@@ -3,6 +3,8 @@
 tcb = 'database_application'
 
 node[tcb]['database']['users'].each do |username, _|
+  next if username == 'root' # We do not create the root user; password is set during server install
+
   mariadb_user 'DB User' do
     username username
     password(lazy { user_password(username) })

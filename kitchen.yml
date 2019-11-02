@@ -19,7 +19,6 @@ provisioner:
   product_version: 15.4.45
   install_strategy: once
   attributes:
-    database_application:
     firewall:
       allow_ssh: true
 

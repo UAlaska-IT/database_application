@@ -78,7 +78,7 @@ module DatabaseApplication
       code = <<~CODE
         \n# Create time stamp and make timed copy
         export TIMESTAMP=`date "+%Y_%m_%d_%H_%M_%S"`
-        p7z a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
+        7z a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
       CODE
       return code
     end

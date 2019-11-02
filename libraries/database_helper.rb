@@ -28,6 +28,10 @@ module DatabaseApplication
       return File.join('/var/backups/database')
     end
 
+    def backup_file(db_type, db_name)
+      return "backup_#{db_type}_#{db_name}.sql"
+    end
+
     def time_file(db_type, db_name, time_stamp)
       return "backup_#{db_type}_#{db_name}_#{time_stamp}.sql"
     end
@@ -38,6 +42,10 @@ module DatabaseApplication
 
     def compress_file(file_name)
       return "#{file_name}.z7"
+    end
+
+    def backup_path(db_type, db_name)
+      return "'#{File.join(default_backup_directory, backup_file(db_type, db_name))}'"
     end
 
     def time_path(db_type, db_name, time_stamp)
@@ -64,14 +72,14 @@ module DatabaseApplication
       return username, password
     end
 
-    def dump_command(db_type, db_hash, time_stamp)
+    def dump_command(db_type, db_hash)
       is_maria = db_type == 'mariadb'
       host, db_name = connection_info(db_hash)
       username, password = user_credentials(db_hash)
-      time_path = time_path(db_type, db_name, time_stamp)
-      return "\nmysqldump -h #{host} -u #{username} -p'#{password}' #{db_name} -c > #{time_path}" if is_maria
+      backup_path = backup_path(db_type, db_name)
+      return "\nmysqldump -h #{host} -u #{username} -p'#{password}' #{db_name} -c > #{backup_path}" if is_maria
 
-      return "\nPGPASSWORD='#{password}' pg_dump -h #{host} -U #{username} #{db_name} > #{time_path}"
+      return "\nPGPASSWORD='#{password}' pg_dump -h #{host} -U #{username} #{db_name} > #{backup_path}"
     end
 
     def compress_command(db_type, db_name, time_stamp)
@@ -102,7 +110,7 @@ module DatabaseApplication
     def backup_command(db_type, db_hash, time_stamp)
       db_name = db_hash['db_name']
       code = ''
-      code += dump_command(db_type, db_hash, time_stamp)
+      code += dump_command(db_type, db_hash)
       code += compress_command(db_type, db_name, time_stamp)
       code += copy_command(db_type, db_name, time_stamp)
       code += s3_copy_command(db_type, db_name, time_stamp) if node[TCB]['backup']['copy_to_s3']

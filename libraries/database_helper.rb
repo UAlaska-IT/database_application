@@ -95,6 +95,10 @@ module DatabaseApplication
       return "\nrm #{latest_path}"
     end
 
+    def set_root_password?
+      return node[TCB]['database']['users'].key?('root')
+    end
+
     def user_password_default(user_hash, key)
       return user_hash[key] if user_hash.key?(key)
 

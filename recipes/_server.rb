@@ -3,13 +3,13 @@
 tcb = 'database_application'
 
 mariadb_server_install 'Server' do
-  password(lazy { vault_default_secret(node[tcb]['server']['root_pw']) }) if node[tcb]['server']['set_root_pw']
+  password(lazy { user_password('root') }) if set_root_password?
   only_if { mariadb_server? }
 end
 
 postgresql_server_install 'Server' do
   initdb_locale node[tcb]['postgresql']['locale']
-  password(lazy { vault_default_secret(node[tcb]['server']['root_pw']) }) if node[tcb]['server']['set_root_pw']
+  password(lazy { user_password('root') }) if set_root_password?
   only_if { postgresql_server? }
 end
 

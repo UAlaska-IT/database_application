@@ -25,6 +25,8 @@ Limitations:
 
 1. Labor costs for management of enterprise databases will be high
 
+1. Backup uses brute dumping and transfer of full backups and therefore is unsuitable for large databases
+
 1. Recovery time is unbounded; recovery requires manual intervention to run a recipe
 
 Bottom line, this cookbook provides cheap, backed-up databases for lightly-used applications that require the existence of a database,

@@ -25,7 +25,7 @@ module DatabaseApplication
       dir = node[TCB]['backup']['directory']
       return dir if dir
 
-      return File.join('/var/backups', node[TCB]['base_name'])
+      return File.join('/var/backups/database')
     end
 
     def time_file(db_type, db_name, time_stamp)

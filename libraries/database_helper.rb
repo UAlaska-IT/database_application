@@ -33,7 +33,7 @@ module DatabaseApplication
     end
 
     def time_file(db_type, db_name)
-      return "backup_#{db_type}_#{db_name}_\#{TIMESTAMP}.sql.7z"
+      return "backup_#{db_type}_#{db_name}_${TIMESTAMP}.sql.7z"
     end
 
     def latest_file(db_type, db_name)

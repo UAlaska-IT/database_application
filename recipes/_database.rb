@@ -2,6 +2,22 @@
 
 tcb = 'database_application'
 
+node[tcb]['database']['users'].each do |name, _|
+  user_pw = user_password(name)
+
+  mariadb_user 'DB User' do
+    username name
+    password user_pw
+    only_if { mariadb_server? }
+  end
+
+  postgresql_user 'DB User' do
+    create_user name
+    password user_pw
+    only_if { postgresql_server? }
+  end
+end
+
 db_name = node[tcb]['db_name']
 
 mariadb_database db_name do
@@ -10,21 +26,6 @@ end
 
 postgresql_database db_name do
   locale node[tcb]['postgresql']['locale']
-  only_if { postgresql_server? }
-end
-
-user = node[tcb]['user_name']
-user_pw = vault_default_secret(node[tcb]['user_pw'])
-
-mariadb_user 'DB User' do
-  username user
-  password user_pw
-  only_if { mariadb_server? }
-end
-
-postgresql_user 'DB User' do
-  create_user user
-  password user_pw
   only_if { postgresql_server? }
 end
 

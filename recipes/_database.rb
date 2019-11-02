@@ -2,17 +2,17 @@
 
 tcb = 'database_application'
 
-node[tcb]['database']['users'].each do |name, _|
-  user_pw = user_password(name)
+node[tcb]['database']['users'].each do |username, _|
+  user_pw = user_password(username)
 
   mariadb_user 'DB User' do
-    username name
+    username username
     password user_pw
     only_if { mariadb_server? }
   end
 
   postgresql_user 'DB User' do
-    create_user name
+    create_user username
     password user_pw
     only_if { postgresql_server? }
   end

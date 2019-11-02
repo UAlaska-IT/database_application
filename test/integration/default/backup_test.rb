@@ -58,10 +58,10 @@ time_stamp = Time.now.strftime('%Y_%m_%d_%H')
 
     describe file backup_script do
       its(:content) { should match("#{db_name} -c > '#{backup_dir}/backup_#{db_tag}.sql") }
-      its(:content) { should match("7z a '#{backup_dir}/backup_#{db_tag}_${TIMESTAMP}.sql.7z' '#{backup_dir}/backup_#{db_tag}.sql'") }
+      its(:content) { should match("7z a \"#{time_file}\" '#{backup_dir}/backup_#{db_tag}.sql'") }
       its(:content) { should match("chmod 640 '#{backup_dir}/backup_#{db_tag}.sql'") }
-      its(:content) { should match("chmod 640 '#{backup_dir}/backup_#{db_tag}_${TIMESTAMP}.sql.7z'") }
-      its(:content) { should match("cp '#{backup_dir}/backup_#{db_tag}_${TIMESTAMP}.sql.7z' '/var/backups/test_db/backup_#{db_tag}_latest.sql.7z'") }
+      its(:content) { should match("chmod 640 \"#{time_file}\"") }
+      its(:content) { should match("cp \"#{time_file}\" '#{latest_file}'") }
     end
 
     describe file time_file do

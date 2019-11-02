@@ -65,18 +65,19 @@ module DatabaseApplication
     end
 
     def dump_command(db_type, db_hash)
-      is_maria = db_type == 'mariadb'
+      maria = db_type == 'mariadb'
       host, db_name = connection_info(db_hash)
       username, password = user_credentials(db_hash)
       backup_path = backup_path(db_type, db_name)
-      return "\nmysqldump -h #{host} -u #{username} -p'#{password}' #{db_name} -c > #{backup_path}" if is_maria
-
-      return "\nPGPASSWORD='#{password}' pg_dump -h #{host} -U #{username} #{db_name} > #{backup_path}"
+      code = "\n# Dump the database"
+      code += "\nmysqldump -h #{host} -u #{username} -p'#{password}' #{db_name} -c > #{backup_path}" if maria
+      code += "\nPGPASSWORD='#{password}' pg_dump -h #{host} -U #{username} #{db_name} > #{backup_path}" unless maria
+      return code
     end
 
     def compress_command(db_type, db_name)
       code = <<~CODE
-        \n# Create time stamp and make timed copy
+        \n\n# Create time stamp and make timed copy
         export TIMESTAMP=`date "+%Y_%m_%d_%H_%M_%S"`
         7z a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
       CODE
@@ -93,7 +94,12 @@ module DatabaseApplication
     end
 
     def copy_command(db_type, db_name)
-      return "\ncp #{time_path(db_type, db_name)} #{latest_path(db_type, db_name)}"
+      code = <<~CODE
+        \n# Copy new file as latest
+        cp #{time_path(db_type, db_name)} #{latest_path(db_type, db_name)}
+
+      CODE
+      return code
     end
 
     def s3_path(file)
@@ -108,6 +114,7 @@ module DatabaseApplication
         \n# Copy both files to S3
         aws s3 cp #{time_path(db_type, db_name)} #{s3_path(time_file(db_type, db_name))}
         aws s3 cp #{latest_path(db_type, db_name)} #{s3_path(latest_file(db_type, db_name))}
+
       CODE
       return code
     end

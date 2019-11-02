@@ -8,23 +8,15 @@ directory default_backup_directory do
   mode '750'
 end
 
-host = node[tcb]['host']
-user = node[tcb]['user_name']
-pass = vault_secret_hash(node[tcb]['user_pw'])
-database = node['database_application']['database']['db_name']
 time_stamp = Time.now.strftime('%Y-%m-%d')
-
 code = ''
-if node[tcb]['configure_mariadb']
-  time_path = time_path('mariadb', time_stamp)
-  code += "\nmysqldump -h #{host} -u #{user} -p'#{pass}' #{database} -c > #{time_path}"
-  code += backup_command('mariadb', time_stamp)
+
+node[tcb]['database']['mariadb'].each do |db_hash|
+  code += backup_command('mariadb', db_hash, time_stamp)
 end
 
-if node[tcb]['configure_postgresql']
-  time_path = time_path('postgresql', time_stamp)
-  code += "\nPGPASSWORD='#{pass}' pg_dump -h #{host} -U #{user} #{database} > #{time_path}"
-  code += backup_command('postgresql', time_stamp)
+node[tcb]['database']['postgresql'].each do |db_hash|
+  code += backup_command('postgresql', db_hash, time_stamp)
 end
 
 cron_d 'database_backup' do

@@ -52,6 +52,18 @@ module DatabaseApplication
       return "'#{File.join(default_backup_directory, compress_file(file_name))}'"
     end
 
+    def dump_command(db_type, db_hash, time_stamp)
+      is_maria = db_type == 'mariadb'
+      host = node[TCB]['host']
+      db_name = db_hash['db_name']
+      username = db_hash['user_names'].first
+      password = user_password(username)
+      time_path = time_path(db_type, db_name, time_stamp)
+      return "\nmysqldump -h #{host} -u #{username} -p'#{password}' #{db_name} -c > #{time_path}" if is_maria
+
+      return "\nPGPASSWORD='#{password}' pg_dump -h #{host} -U #{username} #{db_name} > #{time_path}"
+    end
+
     def compress_command(db_type, db_name, time_stamp)
       time_file = time_file(db_type, db_name, time_stamp)
       return "\np7z a #{compress_path(time_file)} #{time_path(db_type, db_name, time_stamp)}"
@@ -80,6 +92,7 @@ module DatabaseApplication
     def backup_command(db_type, db_hash, time_stamp)
       db_name = db_hash['db_name']
       code = ''
+      code += dump_command(db_type, db_hash, time_stamp)
       code += compress_command(db_type, db_name, time_stamp)
       code += copy_command(db_type, db_name, time_stamp)
       code += s3_copy_command(db_type, db_name, time_stamp) if node[TCB]['backup']['copy_to_s3']

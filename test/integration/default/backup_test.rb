@@ -32,11 +32,8 @@ describe file cron_file do
   it { should be_mode 0o600 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
-  its(:content) { should match('-h localhost') }
-  its(:content) { should match('-u bud') }
-  its(:content) { should match('-p \'PasswordIsASecurePassword\'') }
-  its(:content) { should match('not_used') }
-  its(:content) { should_not match('aws') }
+  its(:content) { should match(%r{SHELL=/bin/bash}) }
+  its(:content) { should match('\* 4 \* \* 0 root /var/chef/database_application_backup\.sh') }
 end
 
 time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')

@@ -78,7 +78,7 @@ module DatabaseApplication
     def compress_command(db_type, db_name)
       code = <<~CODE
         \n\n# Create time stamp and make timed copy
-        export TIMESTAMP=`date "+%Y_%m_%d_%H_%M"`
+        export TIMESTAMP=`date "+%Y_%m_%d_%H"`
         7z a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
         rm #{backup_path(db_type, db_name)}
       CODE

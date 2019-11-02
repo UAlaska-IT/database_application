@@ -2,9 +2,42 @@
 
 tcb = 'database_application'
 
-default[tcb]['configure_mariadb'] = true
-default[tcb]['configure_postgresql'] = true
+default[tcb]['database']['users'] = {
+  root: {
+    vault_bag_item: 'db_root',
+  },
+  bud: {},
+  sri: {},
+}
 
-default[tcb]['db_name'] = 'not_used'
-default[tcb]['user_name'] = 'bud'
+default[tcb]['database']['mariadb'] = [
+  {
+    db_name: 'secret_db',
+    user_names: [
+      'sri',
+      'bud',
+    ],
+  },
+  {
+    db_name: 'small_db',
+    user_names: [
+      'sri',
+    ],
+  },
+]
 
+default[tcb]['database']['postgresql'] = [
+  {
+    db_name: 'public_db',
+    user_names: [
+      'sri',
+    ],
+  },
+  {
+    db_name: 'large_db',
+    user_names: [
+      'bud',
+      'sri',
+    ],
+  },
+]

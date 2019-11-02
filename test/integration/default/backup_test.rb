@@ -24,7 +24,7 @@ describe file backup_script do
   it { should be_grouped_into 'root' }
 end
 
-cron_file = '/etc/cron.d/database_backup'
+cron_file = '/etc/cron.d/database_application_backup'
 
 describe file cron_file do
   it { should exist }

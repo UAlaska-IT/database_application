@@ -27,7 +27,7 @@ file backup_script do
   mode '750'
 end
 
-cron_d 'database_backup' do
+cron_d 'database_application_backup' do
   command backup_script
   shell '/bin/bash'
   weekday node[tcb]['backup']['weekday']

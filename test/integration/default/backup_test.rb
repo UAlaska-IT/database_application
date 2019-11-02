@@ -39,7 +39,7 @@ describe file cron_file do
   its(:content) { should_not match('aws') }
 end
 
-time_stamp = Time.now.strftime('%Y-%m-%d')
+time_stamp = Time.now.strftime('%Y_%m_%d_%H_%M')
 
 {
   mariadb: [

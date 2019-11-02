@@ -18,28 +18,38 @@ node[tcb]['database']['users'].each do |username, _|
   end
 end
 
-db_name = node[tcb]['db_name']
+node[tcb]['database']['mariadb'].each do |db_hash|
+  db_name = db_hash['db_name']
 
-mariadb_database db_name do
-  only_if { mariadb_server? }
+  mariadb_database db_name do
+    only_if { mariadb_server? }
+  end
+
+  db_hash['user_names'].each do |username|
+    mariadb_user 'DB Permissions' do
+      username username
+      password user_password(username)
+      database_name db_name
+      action :grant
+      only_if { mariadb_server? }
+    end
+  end
 end
 
-postgresql_database db_name do
-  locale node[tcb]['postgresql']['locale']
-  only_if { postgresql_server? }
-end
+node[tcb]['database']['mariadb'].each do |db_hash|
+  db_name = db_hash['db_name']
 
-mariadb_user 'DB Permissions' do
-  username user
-  password user_pw
-  database_name db_name
-  action :grant
-  only_if { mariadb_server? }
-end
+  postgresql_database db_name do
+    locale node[tcb]['postgresql']['locale']
+    only_if { postgresql_server? }
+  end
 
-postgresql_access 'DB Permissions' do
-  access_user user
-  access_method 'password'
-  access_db db_name
-  only_if { postgresql_server? }
+  db_hash['user_names'].each do |username|
+    postgresql_access 'DB Permissions' do
+      access_user username
+      access_method 'password'
+      access_db db_name
+      only_if { postgresql_server? }
+    end
+  end
 end

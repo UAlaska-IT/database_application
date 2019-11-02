@@ -22,76 +22,77 @@ module DatabaseApplication
     end
 
     def default_backup_directory
-      dir = node[tcb]['backup']['directory']
+      dir = node[TCB]['backup']['directory']
       return dir if dir
 
       return File.join('/var/backups', node[TCB]['base_name'])
     end
 
-    def time_file(db_type, time_stamp)
-      return "backup_#{db_type}_#{time_stamp}.sql"
+    def time_file(db_type, db_name, time_stamp)
+      return "backup_#{db_type}_#{db_name}_#{time_stamp}.sql"
     end
 
-    def latest_file(db_type)
-      return "backup_#{db_type}_latest.sql"
+    def latest_file(db_type, db_name)
+      return "backup_#{db_type}_#{db_name}_latest.sql"
     end
 
     def compress_file(file_name)
       return "#{file_name}.z7"
     end
 
-    def time_path(db_type, time_stamp)
-      return "'#{File.join(default_backup_directory, time_file(db_type, time_stamp))}'"
+    def time_path(db_type, db_name, time_stamp)
+      return "'#{File.join(default_backup_directory, time_file(db_type, db_name, time_stamp))}'"
     end
 
-    def latest_path(db_type)
-      return "'#{File.join(default_backup_directory, latest_file(db_type))}'"
+    def latest_path(db_type, db_name)
+      return "'#{File.join(default_backup_directory, latest_file(db_type, db_name))}'"
     end
 
     def compress_path(file_name)
       return "'#{File.join(default_backup_directory, compress_file(file_name))}'"
     end
 
-    def compress_command(db_type, time_stamp)
-      time_file = time_file(db_type, time_stamp)
-      return "\np7z a #{compress_path(time_file)} #{time_path(db_type, time_stamp)}"
+    def compress_command(db_type, db_name, time_stamp)
+      time_file = time_file(db_type, db_name, time_stamp)
+      return "\np7z a #{compress_path(time_file)} #{time_path(db_type, db_name, time_stamp)}"
     end
 
-    def copy_command(db_type, time_stamp)
-      return "\ncp #{time_path(db_type, time_stamp)} #{latest_path(db_type)}"
+    def copy_command(db_type, db_name, time_stamp)
+      return "\ncp #{time_path(db_type, db_name, time_stamp)} #{latest_path(db_type, db_name)}"
     end
 
     def s3_path(file)
-      s3 = "s3://#{node[tcb]['backup']['s3_path']}"
+      s3 = "s3://#{node[TCB]['backup']['s3_path']}"
       s3 += '/' unless s3.match?(%r{/$})
       s3 += file
       return s3
     end
 
-    def s3_copy_command(db_type, time_stamp)
+    def s3_copy_command(db_type, db_name, time_stamp)
       code = <<~CODE
         \n# Copy both files to S3
-        aws s3 cp #{time_path(db_type, time_stamp)} #{s3_path(time_file(db_type, time_stamp))}
-        aws s3 cp #{latest_path(db_type)} #{s3_path(latest_file(db_type))}
+        aws s3 cp #{time_path(db_type, db_name, time_stamp)} #{s3_path(time_file(db_type, db_name, time_stamp))}
+        aws s3 cp #{latest_path(db_type, db_name)} #{s3_path(latest_file(db_type, db_name))}
       CODE
       return code
     end
 
-    def backup_command(db_type, time_stamp)
+    def backup_command(db_type, db_hash, time_stamp)
+      db_name = db_hash['db_name']
       code = ''
-      code += compress_command(db_type, time_stamp)
-      code += copy_command(db_type, time_stamp)
-      code += s3_copy_command(db_type, time_stamp) if node[tcb]['backup']['copy_to_s3']
+      code += compress_command(db_type, db_name, time_stamp)
+      code += copy_command(db_type, db_name, time_stamp)
+      code += s3_copy_command(db_type, db_name, time_stamp) if node[TCB]['backup']['copy_to_s3']
       return code
     end
 
-    def extract_command(db_type)
-      compress_path = compress_path(latest_file(db_type))
+    def extract_command(db_type, db_name)
+      compress_path = compress_path(latest_file(db_type, db_name))
       return "\n7z e #{compress_path}"
     end
 
-    def extract_delete_command(db_type)
-      latest_path = latest_path(db_type)
+    def extract_delete_command(db_type, db_name)
+      latest_path = latest_path(db_type, db_name)
       return "\nrm #{latest_path}"
     end
 

@@ -36,7 +36,7 @@ node[tcb]['database']['mariadb'].each do |db_hash|
   end
 end
 
-node[tcb]['database']['mariadb'].each do |db_hash|
+node[tcb]['database']['postgresql'].each do |db_hash|
   db_name = db_hash['db_name']
 
   postgresql_database db_name do

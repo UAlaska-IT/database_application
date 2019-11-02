@@ -19,6 +19,7 @@ chef_version '>= 14.0'
 
 depends 'checksum_file'
 depends 'chef_run_recorder'
+depends 'chef-vault'
 depends 'firewall'
 depends 'mariadb'
 depends 'postgresql'

@@ -33,15 +33,11 @@ module DatabaseApplication
     end
 
     def time_file(db_type, db_name, time_stamp)
-      return "backup_#{db_type}_#{db_name}_#{time_stamp}.sql"
+      return "backup_#{db_type}_#{db_name}_#{time_stamp}.sql.7z"
     end
 
     def latest_file(db_type, db_name)
-      return "backup_#{db_type}_#{db_name}_latest.sql"
-    end
-
-    def compress_file(file_name)
-      return "#{file_name}.z7"
+      return "backup_#{db_type}_#{db_name}_latest.sql.7z"
     end
 
     def backup_path(db_type, db_name)
@@ -54,10 +50,6 @@ module DatabaseApplication
 
     def latest_path(db_type, db_name)
       return "'#{File.join(default_backup_directory, latest_file(db_type, db_name))}'"
-    end
-
-    def compress_path(file_name)
-      return "'#{File.join(default_backup_directory, compress_file(file_name))}'"
     end
 
     def connection_info(db_hash)
@@ -83,8 +75,7 @@ module DatabaseApplication
     end
 
     def compress_command(db_type, db_name, time_stamp)
-      time_file = time_file(db_type, db_name, time_stamp)
-      return "\np7z a #{compress_path(time_file)} #{time_path(db_type, db_name, time_stamp)}"
+      return "\np7z a #{time_path(db_type, db_name, time_stamp)} #{backup_path(db_type, db_name)}"
     end
 
     def copy_command(db_type, db_name, time_stamp)
@@ -138,27 +129,27 @@ module DatabaseApplication
     end
 
     def extract_restore_sql(db_type, db_name)
-      compress_path = compress_path(latest_file(db_type, db_name))
-      command = "\n7z e #{compress_path}"
+      latest_path = latest_path(db_type, db_name)
+      command = "\n7z e #{latest_path}"
       bash_log_out(command)
     end
 
     def run_restore_sql(db_type, db_hash)
       host, db_name = connection_info(db_hash)
       username, password = user_credentials(db_hash)
-      latest_path = latest_path(db_type, db_name)
+      backup_path = backup_path(db_type, db_name)
       command =
         if db_type == 'mariadb'
-          "\nmysql -u #{username} -p'#{password}' #{db_name} < #{latest_path}"
+          "\nmysql -u #{username} -p'#{password}' #{db_name} < #{backup_path}"
         else
-          "\nPGPASSWORD='#{password}' psql -h #{host} -U #{username} #{db_name} < #{latest_path}"
+          "\nPGPASSWORD='#{password}' psql -h #{host} -U #{username} #{db_name} < #{backup_path}"
         end
       bash_log_out(command)
     end
 
     def delete_restore_sql(db_type, db_name)
-      latest_path = latest_path(db_type, db_name)
-      command = "\nrm #{latest_path}"
+      backup_path = backup_path(db_type, db_name)
+      command = "\nrm #{backup_path}"
       bash_log_out(command)
     end
 
@@ -171,7 +162,7 @@ module DatabaseApplication
 
     def restore_database(db_type, db_hash)
       db_name = db_hash['db_name']
-      unless File.exist?(compress_path(latest_path(db_type, db_name)))
+      unless File.exist?(latest_path(db_type, db_name))
         if node[TCB]['backup']['copy_to_s3']
           fetch_archive_from_s3(db_type, db_hash)
         else

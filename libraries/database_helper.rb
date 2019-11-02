@@ -45,7 +45,7 @@ module DatabaseApplication
     end
 
     def time_path(db_type, db_name)
-      return "'#{File.join(default_backup_directory, time_file(db_type, db_name))}'"
+      return "\"#{File.join(default_backup_directory, time_file(db_type, db_name))}\""
     end
 
     def latest_path(db_type, db_name)
@@ -107,7 +107,7 @@ module DatabaseApplication
       s3 = "s3://#{node[TCB]['backup']['s3_path']}"
       s3 += '/' unless s3.match?(%r{/$})
       s3 += file
-      return s3
+      return "\"#{s3}\""
     end
 
     def s3_copy_command(db_type, db_name)

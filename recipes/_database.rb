@@ -5,13 +5,13 @@ tcb = 'database_application'
 node[tcb]['database']['users'].each do |username, _|
   next if username == 'root' # We do not create the root user; password is set during server install
 
-  mariadb_user 'DB User' do
+  mariadb_user 'username' do
     username username
     password(lazy { user_password(username) })
     only_if { mariadb_server? }
   end
 
-  postgresql_user 'DB User' do
+  postgresql_user 'username' do
     create_user username
     password(lazy { user_password(username) })
     only_if { postgresql_server? }

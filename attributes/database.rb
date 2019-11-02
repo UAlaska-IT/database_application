@@ -7,10 +7,9 @@ default[tcb]['configure_postgresql'] = false
 default[tcb]['db_name'] = nil
 default[tcb]['user_name'] = nil
 
-default[tcb]['user_pw']['vault_data_bag'] = 'passwords'
-default[tcb]['user_pw']['vault_bag_item'] = 'database'
-default[tcb]['user_pw']['vault_item_key'] = 'db_user'
 default[tcb]['database']['users'] = {}
 default[tcb]['database']['mariadb'] = []
 default[tcb]['database']['postgresql'] = []
 
+default[tcb]['database']['user_pw']['vault_data_bag'] = 'passwords'
+default[tcb]['database']['user_pw']['vault_bag_item'] = 'database'

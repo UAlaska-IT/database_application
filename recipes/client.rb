@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-tcb = 'database_application'
-
 mariadb_client_install 'Client' do
-  only_if { node[tcb]['configure_mariadb'] }
+  only_if { mariadb_server? }
 end
 
 postgresql_client_install 'Client' do
-  only_if { node[tcb]['configure_postgresql'] }
+  only_if { postgresql_server? }
 end

@@ -52,8 +52,17 @@ time_stamp = Time.now.strftime('%Y-%m-%d')
   ],
 }.each do |db_type, db_names|
   db_names.each do |db_name|
-    time_file = File.join(backup_dir, "backup_#{db_type}_#{db_name}_#{time_stamp}.sql.7z")
-    latest_file = File.join(backup_dir, "backup_#{db_type}_#{db_name}_latest.sql.7z")
+    db_tag = "#{db_type}_#{db_name}"
+    time_file = File.join(backup_dir, "backup_#{db_tag}_#{time_stamp}.sql.7z")
+    latest_file = File.join(backup_dir, "backup_#{db_tag}_latest.sql.7z")
+
+    describe file backup_script do
+      its(:content) { should match("#{db_name} -c > '#{backup_dir}/backup_#{db_tag}.sql") }
+      its(:content) { should match("7z a '#{backup_dir}/backup_#{db_tag}_${TIMESTAMP}.sql.7z' '#{backup_dir}/backup_#{db_tag}.sql'") }
+      its(:content) { should match("chmod 640 '#{backup_dir}/backup_#{db_tag}.sql'") }
+      its(:content) { should match("chmod 640 '#{backup_dir}/backup_#{db_tag}_${TIMESTAMP}.sql.7z'") }
+      its(:content) { should match("cp '#{backup_dir}/backup_#{db_tag}_${TIMESTAMP}.sql.7z' '/var/backups/test_db/backup_#{db_tag}_latest.sql.7z'") }
+    end
 
     describe file time_file do
       it { should exist }

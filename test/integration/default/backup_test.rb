@@ -53,17 +53,18 @@ time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')
 }.each do |db_type, db_names|
   db_names.each do |db_name|
     db_tag = "#{db_type}_#{db_name}"
-    time_file = File.join(backup_dir, "backup_#{db_tag}_#{time_stamp}.sql.7z")
-    latest_file = File.join(backup_dir, "backup_#{db_tag}_latest.sql.7z")
+    timestamp_file = File.join(backup_dir, "backup_#{db_tag}_\\$\\{TIMESTAMP\\}.sql.7z")
+    latest_file = File.join(backup_dir, "backup_#{db_tag}_latest\\.sql\\.7z")
 
     describe file backup_script do
-      its(:content) { should match("#{db_name} -c > '#{backup_dir}/backup_#{db_tag}.sql") }
-      its(:content) { should match("7z a \"#{time_file}\" '#{backup_dir}/backup_#{db_tag}.sql'") }
-      its(:content) { should match("chmod 640 '#{backup_dir}/backup_#{db_tag}.sql'") }
-      its(:content) { should match("chmod 640 \"#{time_file}\"") }
-      its(:content) { should match("cp \"#{time_file}\" '#{latest_file}'") }
+      its(:content) { should match(/#{db_name}(?: -c)? > '#{backup_dir}\/backup_#{db_tag}\.sql/) }
+      its(:content) { should match(/7z a "#{timestamp_file}" '#{backup_dir}\/backup_#{db_tag}\.sql'/) }
+      its(:content) { should match(/chmod 640 '#{backup_dir}\/backup_#{db_tag}\.sql'/) }
+      its(:content) { should match(/chmod 640 "#{timestamp_file}"/) }
+      its(:content) { should match(/cp "#{timestamp_file}" '#{latest_file}'/) }
     end
 
+    time_file = File.join(backup_dir, "backup_#{db_tag}_#{time_stamp}.sql.7z")
     describe file time_file do
       it { should exist }
       it { should be_file }
@@ -72,6 +73,7 @@ time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')
       it { should be_grouped_into 'root' }
     end
 
+    latest_file = File.join(backup_dir, "backup_#{db_tag}_latest.sql.7z")
     describe file latest_file do
       it { should exist }
       it { should be_file }

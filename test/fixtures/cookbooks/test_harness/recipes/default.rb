@@ -5,3 +5,7 @@ bash 'Public Hostname' do
 end
 
 include_recipe 'database_application::server'
+
+bash 'Run Backups' do
+  code '/var/chef/database_application_backup.sh'
+end

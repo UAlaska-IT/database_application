@@ -4,36 +4,13 @@ require_relative '../helpers'
 
 node = json('/opt/chef/run_record/last_chef_run_node.json')['automatic']
 
-installed_command =
-  if node['platform_family'] == 'debian'
-    'apt list --installed'
-  else
-    'yum list installed'
-  end
-
 # Installs
 
-describe bash installed_command do
+describe bash installed_command(node) do
   its(:exit_status) { should eq 0 }
   # its(:stderr) { should eq '' }
-  # Server
-  its(:stdout) { should match(/mariadb-server-10/) }
-  its(:stdout) { should match(/postgresql-9/) }
-  # Client
   its(:stdout) { should match(/mariadb-client-10/) }
   its(:stdout) { should match(/postgresql-client-9/) }
-end
-
-describe service 'mariadb' do
-  it { should be_installed }
-  it { should be_enabled }
-  it { should be_running }
-end
-
-describe service 'postgresql' do
-  it { should be_installed }
-  it { should be_enabled }
-  it { should be_running }
 end
 
 # Database

@@ -9,7 +9,7 @@ backup_dir = '/var/backups/test_db'
 describe file backup_dir do
   it { should exist }
   it { should be_directory }
-  it { should be_mode '750' }
+  it { should be_mode 0o750 }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
 end

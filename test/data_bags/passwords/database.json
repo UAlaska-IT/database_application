@@ -1,4 +1,5 @@
 {
   "db_root": "RootIsExtraSecure",
-  "db_user": "PasswordIsASecurePassword"
+  "bud": "PasswordIsASecurePassword",
+  "sri": "12345678IsASecurePassword"
 }

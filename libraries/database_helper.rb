@@ -120,7 +120,7 @@ module DatabaseApplication
 
     def bash_log_out(command)
       stdout = bash_out(command)
-      Chef::Log.info("\n#{stdout}\n\n")
+      Chef::Log.info("\n\n#{stdout}\n")
     end
 
     def fetch_archive_from_s3(db_type, db_hash)
@@ -167,7 +167,7 @@ module DatabaseApplication
         if node[TCB]['backup']['copy_to_s3']
           fetch_archive_from_s3(db_type, db_hash)
         else
-          Chef::Log.fatal("\nArchive for database #{db_name} not found\n\n")
+          Chef::Log.fatal("\n\nArchive for database #{db_name} not found\n")
         end
       end
       do_restore_database(db_type, db_hash)

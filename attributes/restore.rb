@@ -2,5 +2,5 @@
 
 tcb = 'database_application'
 
-default[tcb]['restore']['mariadb']['databases'] = nil
-default[tcb]['restore']['postgresql']['databases'] = nil
+default[tcb]['restore']['database']['mariadb'] = nil
+default[tcb]['restore']['database']['postgresql'] = nil

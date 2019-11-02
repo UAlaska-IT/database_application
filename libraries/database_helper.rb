@@ -14,11 +14,11 @@ module DatabaseApplication
     end
 
     def mariadb_server?
-      return node[TCB]['mariadb']['databases'].any?
+      return node[TCB]['database']['mariadb'].any?
     end
 
     def postgresql_server?
-      return node[TCB]['postgresql']['databases'].any?
+      return node[TCB]['database']['postgresql'].any?
     end
 
     def default_backup_directory

@@ -83,6 +83,15 @@ module DatabaseApplication
       return code
     end
 
+    def permissions_command(db_type, db_name)
+      code = <<~CODE
+        \n# Give reasonable permissions (the directory is already protected, so little worry of race conditions)
+        chmod 640 #{backup_path(db_type, db_name)}
+        chmod 640 #{time_path(db_type, db_name)}
+      CODE
+      return code
+    end
+
     def copy_command(db_type, db_name)
       return "\ncp #{time_path(db_type, db_name)} #{latest_path(db_type, db_name)}"
     end
@@ -105,9 +114,9 @@ module DatabaseApplication
 
     def backup_command(db_type, db_hash)
       db_name = db_hash['db_name']
-      code = ''
-      code += dump_command(db_type, db_hash)
+      code = dump_command(db_type, db_hash)
       code += compress_command(db_type, db_name)
+      code += permissions_command(db_type, db_name)
       code += copy_command(db_type, db_name)
       code += s3_copy_command(db_type, db_name) if node[TCB]['backup']['copy_to_s3']
       return code

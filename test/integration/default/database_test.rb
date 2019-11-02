@@ -31,19 +31,17 @@ end
 
 # Access
 
-describe bash 'mysql -e \'show grants for bud@localhost;\'' do
+describe bash 'mysql -e "show grants for bud@localhost;"' do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
-  # TODO: A test for table privilege
-  its(:stdout) { should match(/GRANT ALL PRIVILEGES/) }
+  its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `secret_db`/) }
 end
 
-describe bash 'mysql -e \'show grants for sri@localhost;\'' do
+describe bash 'mysql -e "show grants for sri@localhost;"' do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
-  # TODO: A test for table privilege
-  its(:stdout) { should match(/GRANT ALL PRIVILEGES/) }
-  its(:stdout) { should match(/GRANT ALL PRIVILEGES/) }
+  its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `secret_db`/) }
+  its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `small_db`/) }
 end
 
 describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h localhost -l' do

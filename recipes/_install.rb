@@ -2,6 +2,15 @@
 
 tcb = 'database_application'
 
+id_tag = 'Pre-Install Update'
+
+apt_update id_tag do
+  action :update
+  not_if { idempotence_file?(id_tag) }
+end
+
+idempotence_file id_tag
+
 # Compensate for the king-of-snowflakes distro
 include_recipe 'yum-epel::default'
 

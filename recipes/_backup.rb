@@ -8,15 +8,14 @@ directory default_backup_directory do
   mode '750'
 end
 
-time_stamp = Time.now.strftime('%Y-%m-%d')
 code = ''
 
 node[tcb]['database']['mariadb'].each do |db_hash|
-  code += backup_command('mariadb', db_hash, time_stamp)
+  code += backup_command('mariadb', db_hash)
 end
 
 node[tcb]['database']['postgresql'].each do |db_hash|
-  code += backup_command('postgresql', db_hash, time_stamp)
+  code += backup_command('postgresql', db_hash)
 end
 
 backup_script = '/var/chef/database_application_backup.sh'

@@ -32,8 +32,8 @@ module DatabaseApplication
       return "backup_#{db_type}_#{db_name}.sql"
     end
 
-    def time_file(db_type, db_name, time_stamp)
-      return "backup_#{db_type}_#{db_name}_#{time_stamp}.sql.7z"
+    def time_file(db_type, db_name)
+      return "backup_#{db_type}_#{db_name}_\#{TIMESTAMP}.sql.7z"
     end
 
     def latest_file(db_type, db_name)
@@ -44,8 +44,8 @@ module DatabaseApplication
       return "'#{File.join(default_backup_directory, backup_file(db_type, db_name))}'"
     end
 
-    def time_path(db_type, db_name, time_stamp)
-      return "'#{File.join(default_backup_directory, time_file(db_type, db_name, time_stamp))}'"
+    def time_path(db_type, db_name)
+      return "'#{File.join(default_backup_directory, time_file(db_type, db_name))}'"
     end
 
     def latest_path(db_type, db_name)
@@ -74,12 +74,17 @@ module DatabaseApplication
       return "\nPGPASSWORD='#{password}' pg_dump -h #{host} -U #{username} #{db_name} > #{backup_path}"
     end
 
-    def compress_command(db_type, db_name, time_stamp)
-      return "\np7z a #{time_path(db_type, db_name, time_stamp)} #{backup_path(db_type, db_name)}"
+    def compress_command(db_type, db_name)
+      code = <<~CODE
+        \n# Create time stamp and make timed copy
+        export TIMESTAMP=`date "+%Y_%m_%d_%H_%M_%S"`
+        p7z a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
+      CODE
+      return code
     end
 
-    def copy_command(db_type, db_name, time_stamp)
-      return "\ncp #{time_path(db_type, db_name, time_stamp)} #{latest_path(db_type, db_name)}"
+    def copy_command(db_type, db_name)
+      return "\ncp #{time_path(db_type, db_name)} #{latest_path(db_type, db_name)}"
     end
 
     def s3_path(file)
@@ -89,22 +94,22 @@ module DatabaseApplication
       return s3
     end
 
-    def s3_copy_command(db_type, db_name, time_stamp)
+    def s3_copy_command(db_type, db_name)
       code = <<~CODE
         \n# Copy both files to S3
-        aws s3 cp #{time_path(db_type, db_name, time_stamp)} #{s3_path(time_file(db_type, db_name, time_stamp))}
+        aws s3 cp #{time_path(db_type, db_name)} #{s3_path(time_file(db_type, db_name))}
         aws s3 cp #{latest_path(db_type, db_name)} #{s3_path(latest_file(db_type, db_name))}
       CODE
       return code
     end
 
-    def backup_command(db_type, db_hash, time_stamp)
+    def backup_command(db_type, db_hash)
       db_name = db_hash['db_name']
       code = ''
       code += dump_command(db_type, db_hash)
-      code += compress_command(db_type, db_name, time_stamp)
-      code += copy_command(db_type, db_name, time_stamp)
-      code += s3_copy_command(db_type, db_name, time_stamp) if node[TCB]['backup']['copy_to_s3']
+      code += compress_command(db_type, db_name)
+      code += copy_command(db_type, db_name)
+      code += s3_copy_command(db_type, db_name) if node[TCB]['backup']['copy_to_s3']
       return code
     end
 

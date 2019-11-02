@@ -184,7 +184,7 @@ module DatabaseApplication
     end
 
     def user_password_key(user_name, user_hash)
-      return user_hash['vault_bag_item'] if user_hash.key?('vault_bag_item')
+      return user_hash['vault_item_key'] if user_hash.key?('vault_item_key')
 
       return user_name
     end

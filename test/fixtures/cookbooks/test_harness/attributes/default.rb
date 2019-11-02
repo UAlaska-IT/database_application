@@ -4,7 +4,7 @@ tcb = 'database_application'
 
 default[tcb]['database']['users'] = {
   root: {
-    vault_bag_item: 'db_root',
+    vault_item_key: 'db_root',
   },
   bud: {},
   sri: {},

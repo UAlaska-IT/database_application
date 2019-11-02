@@ -30,7 +30,7 @@ default[tcb]['database']['postgresql'] = [
   {
     db_name: 'public_db',
     user_names: [
-      'sri',
+      'bud',
     ],
   },
   {

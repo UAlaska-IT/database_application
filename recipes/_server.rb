@@ -17,12 +17,14 @@ postgresql_server_install 'Server' do
   only_if { postgresql_server? }
 end
 
+code = <<~CODE
+  /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup initdb
+  /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup upgrade
+  systemctl restart postgresql-#{psql_ver}
+CODE
+
 bash 'Initialize PostgeSQL' do
-  code <<~CODE
-    /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup initdb
-    /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup upgrade
-    systemctl restart postgresql-#{psql_ver}
-  CODE
+  code code
   action :nothing
   subscribes :run, 'postgresql_server_install[Server]', :immediate
   only_if { platform_family?('rhel') }

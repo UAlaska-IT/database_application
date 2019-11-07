@@ -2,10 +2,11 @@
 
 tcb = 'database_application'
 
-directory default_backup_directory do
+directory database_backup_directory do
   owner 'root'
   group 'root'
   mode '750'
+  recursive true
 end
 
 code = ''

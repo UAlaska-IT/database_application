@@ -23,7 +23,7 @@ code = <<~CODE
   systemctl restart postgresql-#{psql_ver}
 CODE
 
-bash 'Initialize PostgeSQL' do
+bash 'Initialize PostgreSQL' do
   code code
   action :nothing
   subscribes :run, 'postgresql_server_install[Server]', :immediate

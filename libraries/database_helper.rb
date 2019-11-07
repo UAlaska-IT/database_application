@@ -30,11 +30,8 @@ module DatabaseApplication
       return hosts.keys
     end
 
-    def default_backup_directory
-      dir = node[TCB]['backup']['directory']
-      return dir if dir
-
-      return File.join('/var/backups/database')
+    def database_backup_directory
+      return node[TCB]['backup']['directory']
     end
 
     def backup_file(db_type, db_name)
@@ -50,15 +47,15 @@ module DatabaseApplication
     end
 
     def backup_path(db_type, db_name)
-      return "'#{File.join(default_backup_directory, backup_file(db_type, db_name))}'"
+      return "'#{File.join(database_backup_directory, backup_file(db_type, db_name))}'"
     end
 
     def time_path(db_type, db_name)
-      return "\"#{File.join(default_backup_directory, time_file(db_type, db_name))}\""
+      return "\"#{File.join(database_backup_directory, time_file(db_type, db_name))}\""
     end
 
     def latest_path(db_type, db_name)
-      return "'#{File.join(default_backup_directory, latest_file(db_type, db_name))}'"
+      return "'#{File.join(database_backup_directory, latest_file(db_type, db_name))}'"
     end
 
     def local_connection_info(db_hash)

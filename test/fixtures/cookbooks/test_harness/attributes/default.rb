@@ -6,7 +6,11 @@ default[tcb]['database']['users'] = {
   root: {
     vault_item_key: 'db_root',
   },
-  bud: {},
+  bud: {
+    additional_hosts: [
+      'db.example.com',
+    ],
+  },
   sri: {},
 }
 

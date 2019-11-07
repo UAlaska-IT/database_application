@@ -21,6 +21,19 @@ module DatabaseApplication
       return node[TCB]['database']['postgresql'].any?
     end
 
+    def hosts_for_user(user_hash)
+      hosts = {
+        'localhost' => nil,
+        '127.0.0.1' => nil,
+      }
+      if user_hash.key?('additional_hosts')
+        user_hash['additional_hosts'].each do |host|
+          hosts[host] = nil
+        end
+      end
+      return hosts.keys
+    end
+
     def default_backup_directory
       dir = node[TCB]['backup']['directory']
       return dir if dir

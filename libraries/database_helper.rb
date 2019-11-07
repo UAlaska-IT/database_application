@@ -5,12 +5,8 @@ module DatabaseApplication
   module Helper
     TCB = 'database_application'
 
-    def local_database?
-      return node[TCB]['host'] == 'localhost'
-    end
-
     def configure_firewall?
-      return node[TCB]['configure_firewall'] && !local_database?
+      return node[TCB]['configure_firewall']
     end
 
     def mariadb_server?

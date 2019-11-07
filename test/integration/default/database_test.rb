@@ -4,7 +4,7 @@ require_relative '../helpers'
 
 # Database
 
-describe bash 'mysql -e \'show databases;\'' do
+describe bash 'mysql -e "show databases;"' do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
   its(:stdout) { should match(/secret_db/) }
@@ -20,7 +20,7 @@ end
 
 # User
 
-describe bash 'mysql -e \'select User from mysql.user;\'' do
+describe bash 'mysql -e "select User from mysql.user;"' do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
   its(:stdout) { should match(/bud/) }

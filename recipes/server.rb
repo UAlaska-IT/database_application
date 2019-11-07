@@ -3,7 +3,7 @@
 tcb = 'database_application'
 
 # TODO: Gating for server, client
-#
+
 include_recipe "#{tcb}::_install"
 
 include_recipe "#{tcb}::_server"

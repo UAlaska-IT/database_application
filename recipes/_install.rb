@@ -14,6 +14,44 @@ idempotence_file id_tag
 # Compensate for the king-of-snowflakes distro
 include_recipe 'yum-epel::default'
 
+mariadb_file = '/var/chef/idempotence/database_application_mariadb_version'
+
+file 'mariadb_file' do
+  path mariadb_file
+  content node[tcb]['mariadb_version']
+end
+
+postgresql_file = '/var/chef/idempotence/database_application_postgresql_version'
+
+file 'postgresql_file' do
+  path postgresql_file
+  content node[tcb]['postgresql_version']
+end
+
+[
+  'mariadb-client',
+  'mariadb-server',
+].each do |package|
+  package package do
+    action :nothing
+    subscribes :remove, 'file[mariadb_file]', :immediate
+  end
+end
+
+[
+  'postgresql',
+  'postgresql-client',
+  'postgresql-devel',
+  'postgresql-libs',
+  'postgresql-server',
+  'postgresql-upgrade',
+].each do |package|
+  package package do
+    action :nothing
+    subscribes :remove, 'file[postgresql_file]', :immediate
+  end
+end
+
 is_debian = platform_family?('debian')
 
 package 'p7zip-full' if is_debian

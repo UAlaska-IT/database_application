@@ -21,7 +21,7 @@ bash 'Initialize PostgeSQL' do
   code <<~CODE
     /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup initdb
     /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup upgrade
-    ls / # Ignore outputs until we get smarter
+    systemctl restart postgresql-#{psql_ver}
   CODE
   action :nothing
   subscribes :run, 'postgresql_server_install[Server]', :immediate

@@ -61,10 +61,8 @@ module DatabaseApplication
       return "'#{File.join(default_backup_directory, latest_file(db_type, db_name))}'"
     end
 
-    def connection_info(db_hash)
-      host = node[TCB]['host']
-      db_name = db_hash['db_name']
-      return host, db_name
+    def local_connection_info(db_hash)
+      return 'localhost', db_hash['db_name']
     end
 
     def user_credentials(db_hash)
@@ -75,7 +73,7 @@ module DatabaseApplication
 
     def dump_command(db_type, db_hash)
       maria = db_type == 'mariadb'
-      host, db_name = connection_info(db_hash)
+      host, db_name = local_connection_info(db_hash)
       username, password = user_credentials(db_hash)
       backup_path = backup_path(db_type, db_name)
       code = "\n# Dump the database"
@@ -166,7 +164,7 @@ module DatabaseApplication
     end
 
     def run_restore_sql(db_type, db_hash)
-      host, db_name = connection_info(db_hash)
+      host, db_name = local_connection_info(db_hash)
       username, password = user_credentials(db_hash)
       backup_path = backup_path(db_type, db_name)
       command =

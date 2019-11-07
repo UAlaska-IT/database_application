@@ -20,14 +20,37 @@ end
 
 # User
 
-describe bash 'mysql -e "select User from mysql.user;"' do
+describe bash 'mysql -e "select concat(User,\'@\',Host) from mysql.user;"' do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
-  its(:stdout) { should match(/bud/) }
-  its(:stdout) { should match(/sri/) }
+  its(:stdout) { should match(/bud@localhost/) }
+  its(:stdout) { should match(/bud@127\.0\.0\.1/) }
+  its(:stdout) { should match(/bud@db\.example\.com/) }
+  its(:stdout) { should match(/sri@localhost/) }
+  its(:stdout) { should match(/sri@127\.0\.0\.1/) }
 end
 
 # PostgreSQL user test is implicit in login method
+describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h localhost -l' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+end
+describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h 127.0.0.1 -l' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+end
+describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h db.example.com -l' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+end
+describe bash 'PGPASSWORD=12345678IsASecurePassword psql -U sri -h localhost -l' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+end
+describe bash 'PGPASSWORD=12345678IsASecurePassword psql -U sri -h 127.0.0.1 -l' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+end
 
 # Access
 

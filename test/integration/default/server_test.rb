@@ -13,6 +13,18 @@ describe bash installed_command(node) do
   its(:stdout) { should match(/postgresql-9/) }
 end
 
+describe bash 'mysql --version' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+  its(:stdout) { should match(/10\.4/) }
+end
+
+describe bash 'psql --version' do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should eq '' }
+  its(:stdout) { should match(/12\.0/) }
+end
+
 describe service 'mariadb' do
   it { should be_installed }
   it { should be_enabled }

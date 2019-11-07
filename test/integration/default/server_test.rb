@@ -10,7 +10,7 @@ describe bash installed_command(node) do
   its(:exit_status) { should eq 0 }
   # its(:stderr) { should eq '' }
   its(:stdout) { should match(/mariadb-server-10/) }
-  its(:stdout) { should match(/postgresql-9/) }
+  its(:stdout) { should match(/postgresql-12/) }
 end
 
 describe bash 'mysql --version' do

@@ -55,6 +55,8 @@ node[tcb]['database']['postgresql'].each do |db_hash|
 
     hosts.each do |host|
       postgresql_access "Permissions for #{username}@#{host} on #{db_name}" do
+        source 'pg_hba.conf.erb'
+        cookbook 'database_application'
         access_user username
         access_method 'md5'
         access_type 'host'

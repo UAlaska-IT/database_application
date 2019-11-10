@@ -20,7 +20,7 @@ module DatabaseApplication
     def hosts_for_user(user_hash)
       hosts = {
         'localhost' => nil,
-        '127.0.0.1' => nil,
+        '127.0.0.1/32' => nil,
       }
       if user_hash.key?('additional_hosts')
         user_hash['additional_hosts'].each do |host|

@@ -45,7 +45,14 @@ describe service 'mariadb' do
   it { should be_running }
 end
 
-describe service 'postgresql' do
+postgre_service =
+  if node['platform_family'] == 'debian'
+    'postgresql'
+  else
+    'postgresql-12'
+  end
+
+describe service postgre_service do
   it { should be_installed }
   it { should be_enabled }
   it { should be_running }

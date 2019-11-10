@@ -2,6 +2,8 @@
 
 require_relative '../helpers'
 
+node = json('/opt/chef/run_record/last_chef_run_node.json')['automatic']
+
 # Database
 
 describe bash 'mysql -e "show databases;"' do
@@ -80,4 +82,35 @@ describe bash 'PGPASSWORD=12345678IsASecurePassword psql -U sri -h localhost -l'
   its(:stderr) { should eq '' }
   # TODO: A test for table privilege
   its(:stdout) { should match(/large_db/) }
+end
+
+pg_hba_dir =
+  if node['platform_family'] == 'debian'
+    '/etc/postgresql/12/main'
+  else
+    '/var/lib/pgsql/12/data'
+  end
+pg_hba = File.join(pg_hba_dir, 'pg_hba.conf')
+
+describe file pg_hba do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o600 }
+  it { should be_owned_by 'postgres' }
+  it { should be_grouped_into 'postgres' }
+  its(:content) { should match(/local\s+all\s+postgres\s+peer/) }
+  its(:content) { should match(/local\s+all\s+all\s+md5/) }
+  its(:content) { should match(%r{host\s+all\s+all\s+127\.0\.0\.1/32\s+md5}) }
+  its(:content) { should match(%r{host\s+all\s+all\s+::1/128\s+md5}) }
+
+  its(:content) { should match(/host\s+public_db\s+bud\s+localhost\s*md5/) }
+  its(:content) { should match(%r{host\s+public_db\s+bud\s+127\.0\.0\.1/32\s+md5}) }
+  its(:content) { should match(/host\s+public_db\s+bud\s+db\.example\.com\s*md5/) }
+
+  its(:content) { should match(/host\s+large_db\s+bud\s+localhost\s*md5/) }
+  its(:content) { should match(%r{host\s+large_db\s+bud\s+127\.0\.0\.1/32\s+md5}) }
+  its(:content) { should match(/host\s+large_db\s+bud\s+db\.example\.com\s*md5/) }
+
+  its(:content) { should match(/host\s+large_db\s+sri\s+localhost\s*md5/) }
+  its(:content) { should match(%r{host\s+large_db\s+sri\s+127\.0\.0\.1/32\s+md5}) }
 end

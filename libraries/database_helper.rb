@@ -30,6 +30,12 @@ module DatabaseApplication
       return hosts.keys
     end
 
+    def zip_command
+      return '7z' if platform_family?('debian')
+
+      return '7za'
+    end
+
     def database_backup_directory
       return node[TCB]['backup']['directory']
     end
@@ -83,7 +89,7 @@ module DatabaseApplication
       code = <<~CODE
         \n\n# Create time stamp and make timed copy
         export TIMESTAMP=`date "+%Y_%m_%d_%H"`
-        7z a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
+        #{zip_command} a #{time_path(db_type, db_name)} #{backup_path(db_type, db_name)}
         rm #{backup_path(db_type, db_name)}
       CODE
       return code
@@ -156,7 +162,7 @@ module DatabaseApplication
 
     def extract_restore_sql(db_type, db_name)
       latest_path = latest_path(db_type, db_name)
-      command = "\n7z e #{latest_path}"
+      command = "\n#{zip_command} e #{latest_path}"
       bash_log_out(command)
     end
 

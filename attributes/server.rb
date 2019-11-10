@@ -2,4 +2,4 @@
 
 tcb = 'database_application'
 
-default[tcb]['postgresql']['locale'] = 'C.UTF-8'
+default[tcb]['postgresql']['server_locale'] = 'C.UTF-8'

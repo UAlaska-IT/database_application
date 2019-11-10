@@ -24,7 +24,10 @@ end
 node[tcb]['database']['mariadb'].each do |db_hash|
   db_name = db_hash['db_name']
 
-  mariadb_database db_name
+  mariadb_database db_name do
+    collation node[tcb]['mariadb']['db_collation']
+    encoding node[tcb]['mariadb']['db_encoding']
+  end
 
   db_hash['user_names'].each do |username|
     user_hash = node[tcb]['database']['users'][username]
@@ -46,7 +49,7 @@ node[tcb]['database']['postgresql'].each do |db_hash|
   db_name = db_hash['db_name']
 
   postgresql_database db_name do
-    locale node[tcb]['postgresql']['locale']
+    locale node[tcb]['postgresql']['db_locale']
   end
 
   db_hash['user_names'].each do |username|

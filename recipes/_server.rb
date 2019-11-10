@@ -16,7 +16,7 @@ end
 psql_ver = node[tcb]['postgresql_version']
 
 postgresql_server_install 'Server' do
-  initdb_locale node[tcb]['postgresql']['locale']
+  initdb_locale node[tcb]['postgresql']['server_locale']
   password(lazy { user_password('root') }) if set_root_password?
   version psql_ver if psql_ver
   only_if { postgresql_server? }

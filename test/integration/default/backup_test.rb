@@ -4,7 +4,7 @@ require_relative '../helpers'
 
 # node = json('/opt/chef/run_record/last_chef_run_node.json')['automatic']
 
-backup_dir = '/var/backups/test_db'
+backup_dir = '/var/opt/backups/test_db'
 
 describe file backup_dir do
   it { should exist }

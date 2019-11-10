@@ -46,4 +46,4 @@ default[tcb]['database']['postgresql'] = [
   },
 ]
 
-default[tcb]['backup']['directory'] = '/var/backups/test_db'
+default[tcb]['backup']['directory'] = '/var/opt/backups/test_db'

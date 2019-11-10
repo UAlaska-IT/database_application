@@ -8,6 +8,11 @@ mariadb_server_install 'Server' do
   only_if { mariadb_server? }
 end
 
+# Enable needed for CentOS
+service 'mariadb' do
+  action :enable
+end
+
 psql_ver = node[tcb]['postgresql_version']
 
 postgresql_server_install 'Server' do
@@ -15,6 +20,13 @@ postgresql_server_install 'Server' do
   password(lazy { user_password('root') }) if set_root_password?
   version psql_ver if psql_ver
   only_if { postgresql_server? }
+end
+
+# Enable needed for CentOS
+service 'postgresql' do
+  extend PostgresqlCookbook::Helpers
+  service_name(lazy { platform_service_name })
+  action :enable
 end
 
 code = <<~CODE

@@ -56,8 +56,9 @@ node[tcb]['database']['postgresql'].each do |db_hash|
   db_hash['user_names'].each do |username|
     postgresql_access 'DB Permissions' do
       access_user username
-      access_method 'password'
+      access_method 'md5'
       access_db db_name
+      access_type 'host'
       only_if { postgresql_server? }
     end
   end

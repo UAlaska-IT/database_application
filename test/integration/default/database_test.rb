@@ -69,19 +69,21 @@ describe bash 'mysql -e "show grants for sri@localhost;"' do
   its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `small_db`/) }
 end
 
-describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h localhost -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-  # TODO: A test for table privilege
-  its(:stdout) { should match(/public_db/) }
-  its(:stdout) { should match(/large_db/) }
-end
+psql_command = '-c "CREATE TABLE IF NOT EXISTS test_table (i integer);"'
 
-describe bash 'PGPASSWORD=12345678IsASecurePassword psql -U sri -h localhost -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-  # TODO: A test for table privilege
-  its(:stdout) { should match(/large_db/) }
+postgresql_dbs.each do |db_hash|
+  db_hash['user_names'].each do |user|
+    user_hash = users_hash[user]
+    pass = user_hash['password']
+    hosts = hosts_for_user(user)
+    hosts.each do |host|
+      describe bash "PGPASSWORD=#{pass} psql -U #{user} -h #{host} -d #{db_hash['db_name']} #{psql_command}" do
+        its(:exit_status) { should eq 0 }
+        # its(:stderr) { should eq '' }
+        its(:stdout) { should match(/CREATE TABLE/) }
+      end
+    end
+  end
 end
 
 pg_hba_dir =

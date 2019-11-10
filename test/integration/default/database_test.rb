@@ -33,25 +33,13 @@ describe bash 'mysql -e "select concat(User,\'@\',Host) from mysql.user;"' do
 end
 
 # PostgreSQL user test is implicit in login method
-describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h localhost -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-end
-describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h 127.0.0.1 -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-end
-describe bash 'PGPASSWORD=PasswordIsASecurePassword psql -U bud -h db.example.com -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-end
-describe bash 'PGPASSWORD=12345678IsASecurePassword psql -U sri -h localhost -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-end
-describe bash 'PGPASSWORD=12345678IsASecurePassword psql -U sri -h 127.0.0.1 -l' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
+users_hash.each do |user, user_hash|
+  hosts_for_user(user).each do |host|
+    describe bash "PGPASSWORD=#{user_hash['password']} psql -U #{user} -h #{host} -l" do
+      its(:exit_status) { should eq 0 }
+      its(:stderr) { should eq '' }
+    end
+  end
 end
 
 # Access

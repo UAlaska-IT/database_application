@@ -2,10 +2,13 @@
 
 tcb = 'database_application'
 
-node[tcb]['database']['mariadb'].each do |db_hash|
-  restore_database('mariadb', db_hash)
-end
+[
+  'mariadb',
+  'postgresql',
+].each do |db_type|
+  db_to_restore = node[tcb]['restore']['database'][db_type] || node[tcb]['database'][db_type]
 
-node[tcb]['database']['postgresql'].each do |db_hash|
-  restore_database('postgresql', db_hash)
+  db_to_restore.each do |db_hash|
+    restore_database(db_type, db_hash)
+  end
 end

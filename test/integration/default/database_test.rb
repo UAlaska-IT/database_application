@@ -63,8 +63,7 @@ postgresql_dbs.each do |db_hash|
   db_hash['user_names'].each do |user|
     user_hash = users_hash[user]
     pass = user_hash['password']
-    hosts = hosts_for_user(user)
-    hosts.each do |host|
+    hosts_for_user(user).each do |host|
       describe bash "PGPASSWORD=#{pass} psql -U #{user} -h #{host} -d #{db_hash['db_name']} #{psql_command}" do
         its(:exit_status) { should eq 0 }
         # its(:stderr) { should eq '' }

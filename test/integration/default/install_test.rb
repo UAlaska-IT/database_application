@@ -13,6 +13,26 @@ describe bash('yum repolist') do
   end
 end
 
+ver_dir = '/var/chef/idempotence'
+
+describe file(File.join(ver_dir, 'database_application_mariadb_version')) do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  its(:content) { should match '10.4' }
+end
+
+describe file(File.join(ver_dir, 'database_application_postgresql_version')) do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 0o644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  its(:content) { should match '12' }
+end
+
 describe package 'p7zip-full' do
   it { should be_installed } if node['platform_family'] == 'debian'
 end

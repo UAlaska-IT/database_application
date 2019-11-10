@@ -2,7 +2,12 @@
 
 tcb = 'database_application'
 
-# TODO: Gating for server, client
+service 'postgresql' do
+  extend PostgresqlCookbook::Helpers
+  service_name(lazy { platform_service_name })
+  supports restart: true, status: true, reload: true
+  action :nothing
+end
 
 include_recipe "#{tcb}::_install"
 

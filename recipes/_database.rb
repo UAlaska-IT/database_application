@@ -62,6 +62,7 @@ node[tcb]['database']['postgresql'].each do |db_hash|
         access_type 'host'
         access_addr host
         access_db db_name
+        notifies :reload, 'service[postgresql]', :delayed
       end
     end
   end

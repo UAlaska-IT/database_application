@@ -18,6 +18,17 @@ postgresql_server_install 'Server' do
 end
 
 code = <<~CODE
+  systemctl restart mariadb
+CODE
+
+bash 'Initialize MariaDB' do
+  code code
+  action :nothing
+  subscribes :run, 'mariadb_server_install[Server]', :immediate
+  only_if { platform_family?('rhel') }
+end
+
+code = <<~CODE
   /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup initdb
   /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup upgrade
   systemctl restart postgresql-#{psql_ver}

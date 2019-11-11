@@ -44,17 +44,17 @@ end
 
 # Access
 
-describe bash 'mysql -e "show grants for bud@localhost;"' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-  its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `secret_db`/) }
-end
-
-describe bash 'mysql -e "show grants for sri@localhost;"' do
-  its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
-  its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `secret_db`/) }
-  its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `small_db`/) }
+mariadb_dbs.each do |db_hash|
+  db_hash['user_names'].each do |user|
+    user_hash = users_hash[user]
+    hosts_for_user(user).each do |host|
+      describe bash "mysql -e 'show grants for #{user}@#{host};'" do
+        its(:exit_status) { should eq 0 }
+        its(:stderr) { should eq '' }
+        its(:stdout) { should match(/GRANT ALL PRIVILEGES ON `#{db_hash['db_name']}`/) }
+      end
+    end
+  end
 end
 
 psql_command = '-c "CREATE TABLE IF NOT EXISTS test_table (i integer);"'

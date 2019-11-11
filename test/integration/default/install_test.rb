@@ -10,6 +10,7 @@ describe bash('yum repolist') do
   its(:stdout) { should match 'epel/x86_64' }
   before do
     skip if node['platform_family'] == 'debian'
+    skip if node['platform_family'] == 'fedora'
   end
 end
 
@@ -59,5 +60,12 @@ describe package 'dirmngr' do
   it { should be_installed }
   before do
     skip unless node['platform_family'] == 'debian'
+  end
+end
+
+describe package 'crontabs' do
+  it { should be_installed }
+  before do
+    skip if node['platform_family'] == 'debian'
   end
 end

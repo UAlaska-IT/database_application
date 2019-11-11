@@ -56,4 +56,5 @@ suites:
       - ubuntu-18.04
       - debian-9
       - centos-7
+      - fedora-30
       - sles-15

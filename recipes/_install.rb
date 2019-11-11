@@ -12,7 +12,7 @@ end
 idempotence_file id_tag
 
 # Compensate for the king-of-snowflakes distro
-include_recipe 'yum-epel::default'
+include_recipe 'yum-epel::default' unless platform?('fedora')
 
 mariadb_file = '/var/chef/idempotence/database_application_mariadb_version'
 
@@ -71,7 +71,12 @@ bash 'Install AWS CLI' do
   only_if { node[tcb]['configure_backup'] }
 end
 
-# Missing on debian
+# Missing on Debian, needed for repo setup
 package 'dirmngr' do
   only_if { platform_family?('debian') }
+end
+
+# Missing on Fedora, needed for backup job
+package 'crontabs' do
+  not_if { platform_family?('debian') }
 end

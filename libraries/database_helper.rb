@@ -41,6 +41,16 @@ module DatabaseApplication
       return hosts.keys
     end
 
+    def postgresql_data_directory
+      return "/etc/postgresql/#{node[TCB]['postgresql_version']}/main" if platform_family?('debian')
+
+      return "/var/lib/pgsql/#{node[TCB]['postgresql_version']}/data"
+    end
+
+    def path_to_postgresql_hba_conf
+      return File.join(postgresql_data_directory, 'pg_hba.conf')
+    end
+
     def zip_command
       return '7z' if platform_family?('debian')
 

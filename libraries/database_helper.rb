@@ -17,11 +17,16 @@ module DatabaseApplication
       return node[TCB]['database']['postgresql'].any?
     end
 
+    def default_hosts
+      hosts = {}
+      node[TCB]['database']['hosts'].each do |host|
+        hosts[host] = nil
+      end
+      return hosts
+    end
+
     def hosts_for_user(user_hash)
-      hosts = {
-        'localhost' => nil,
-        '127.0.0.1/32' => nil,
-      }
+      hosts = default_hosts
       if user_hash.key?('additional_hosts')
         user_hash['additional_hosts'].each do |host|
           hosts[host] = nil

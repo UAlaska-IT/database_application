@@ -35,12 +35,12 @@ but are not sensitive to resources or tuning.
 The firewall can be configured for remote access, or not for local databases.
 
 Automated dumps can be setup, as well as automated remote backup to AWS S3.
-For remote backup to succeed, the node must be configured with a proper instance profile that provides S3 put privileges for the indicated bucket.
+For remote backup to succeed, the node must be configured with an instance profile that provides S3 put privileges for the indicated bucket.
 
 A recovery recipe is included and will recover up to all databases, possibly from S3..
 If a local backup exists, it will be used.
 For recovery to succeed on a new node that does not have local backups available,
-the node must be configured with a proper instance profile that provides S3 get privileges for the indicated bucket.
+the node must be configured with an instance profile that provides S3 get privileges for the indicated bucket.
 
 ## Requirements
 
@@ -75,7 +75,7 @@ This cookbook provides no custom resources.
 
 ### database_application::server
 
-This recipe configures possibly two database servers and databases.
+This recipe configures possibly two database servers and multiple databases.
 
 ### database_application::client
 
@@ -83,8 +83,8 @@ This recipe configures possibly two database clients.
 
 ### database_application::restore
 
-If a both a local database is configured and backups are configured,
-this recipe will restore the database from the latest snapshot.
+If a both local databases are configured and backups are configured,
+this recipe will restore databases from their latest snapshots.
 Otherwise does nothing.
 
 ## Attributes
@@ -108,6 +108,7 @@ If true backups will be created.
 Versions to install are specified to the latest when this cookbook was updated.
 Other versions will be uninstalled, entailing interruption of service.
 Both initialization and upgrade are performed when a new version is installed.
+It is advisable to upgrade one release at a time, because the underlying databases do not support arbitrary upgrade steps.
 
 * `node['database_application']['mariadb_version']`.
 Defaults to `'10.4'`.
@@ -119,17 +120,17 @@ The version of PostgreSQL to install.
 
 ### server
 
-Which database servers to install is inferred from database attributes.
-
 * `node['database_application']['postgresql']['server_locale']`.
 Defaults to `'C.UTF-8'`.
 The locale for the master database.
 
+Which database servers to install is inferred from database attributes.
+
 ### firewall
 
 * `node['database_application']['firewall']['allowed_source']`.
-Defaults to `'0.0.0.0/0'`.
-Allowed origins for database connections.
+Defaults to `nil`.
+If non-nil, will be set as the source for database connections.
 For most databases this should be restricted.
 
 ### database
@@ -206,6 +207,13 @@ and the listed users will be granted full privileges on that database from all h
     ],
   }
 ```
+
+Minimum access for all databases is specified in one attribute.
+
+* `node['database_application']['database']['hosts']`.
+Defaults to `['localhost', '127.0.0.1/32']`.
+The default hosts allowed for all users.
+If remote access is desired, the FQDN of the server is typically appended to this list.
 
 ### backup
 

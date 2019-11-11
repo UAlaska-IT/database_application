@@ -158,11 +158,11 @@ User 'root' can be included to set a password for the root user, otherwise peer 
 
 * `node['database_application']['database']['users']`.
 Defaults to `{}`.
-The hash of username to attributes fo all database users.
+The hash of username to attributes for all database users.
 A complete hash would look as below, but all attributes can be omitted.
-A user is always granted local access ('locahost', '127.0.0.1');
-additional hosts can be specified.
-In addition to defaults for data bag and item below, vault_item_key will default to username.
+A user is always granted access to sources listed in `node['database_application']['database']['hosts']`;
+additional hosts can be added here.
+In addition to defaults for vault_data_bag and vault_bag_item below, vault_item_key will default to username.
 ```ruby
 {
   bud: {
@@ -217,6 +217,13 @@ If remote access is desired, the FQDN of the server is typically appended to thi
 
 ### backup
 
+If configured, backup files are compressed, timestamped, and then copied to the 'latest' revision.
+Thus two artifacts are created,
+backup\_{mariadb, postgresql}\_{db_name}\_{TIMESTAMP}.sql.7z and
+backup\_{mariadb, postgresql}\_{db_name}\_latest.sql.7z.
+Both files are copied to S3 if configured to do so.
+The timestamped file may be deleted if configured to do so.
+
 * `node['database_application']['backup']['directory']`.
 Defaults to `'/var/opt/database_application/backups'`.
 The directory in which to store backups.
@@ -245,7 +252,7 @@ If false, the attributes below have no effect.
 
 * `node['database_application']['backup']['delete_local_copy']`.
 Defaults to `false`.
-If true, the 'timed' backup we be deleted after successfully uploading to S3.
+If true, the timestamped backup will be deleted after successfully uploading to S3.
 A 'latest' backup is always retained.
 
 * `node['database_application']['backup']['s3_path']`.

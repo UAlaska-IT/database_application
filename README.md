@@ -212,8 +212,16 @@ and the listed users will be granted full privileges on that database from all h
 Minimum access for all databases is specified in one attribute.
 
 * `node['database_application']['database']['hosts']`.
-Defaults to `['localhost', '127.0.0.1/32']`.
+Defaults to
+```ruby
+[
+  'localhost',
+  '127.0.0.1',
+  '127.0.0.1/32',
+]
+```
 The default hosts allowed for all users.
+This list encompasses both grants in MariaDB and addresses in PostgreSQL, so contains some redundancies for either.
 If remote access is desired, the FQDN of the server is typically appended to this list.
 
 ### backup

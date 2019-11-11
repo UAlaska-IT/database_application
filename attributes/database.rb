@@ -18,6 +18,7 @@ default[tcb]['database']['postgresql'] = []
 
 default[tcb]['database']['hosts'] = [
   'localhost',
+  '127.0.0.1',
   '127.0.0.1/32',
 ]
 default[tcb]['database']['user_pw']['vault_data_bag'] = 'passwords'

@@ -10,7 +10,7 @@ end
 
 # Enable needed for CentOS
 service 'mariadb' do
-  action :enable
+  action [:start, :enable]
 end
 
 psql_ver = node[tcb]['postgresql_version']
@@ -27,17 +27,6 @@ service 'postgresql' do
   extend PostgresqlCookbook::Helpers
   service_name(lazy { platform_service_name })
   action :enable
-end
-
-code = <<~CODE
-  systemctl restart mariadb
-CODE
-
-bash 'Initialize MariaDB' do
-  code code
-  action :nothing
-  subscribes :run, 'mariadb_server_install[Server]', :immediate
-  only_if { platform_family?('rhel') }
 end
 
 code = <<~CODE

@@ -38,6 +38,10 @@ platforms:
   - name: fedora-29
   - name: amazon2
   - name: sles-15
+    driver:
+      image_search:
+        owner-id: '013907871322'
+        name: suse-sles-15*
   - name: windows-2019
   - name: windows-2016
   - name: windows-2012r2

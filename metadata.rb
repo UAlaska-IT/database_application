@@ -19,8 +19,8 @@ supports 'centos'
 supports 'oracle'
 supports 'fedora'
 # supports 'amazon'
-supports 'suse'
-supports 'opensuse'
+# supports 'suse'
+# supports 'opensuse'
 
 chef_version '>= 14.0'
 

@@ -91,14 +91,11 @@ describe file pg_hba do
   its(:content) { should match(%r{host\s+all\s+all\s+127\.0\.0\.1/32\s+md5}) }
   its(:content) { should match(%r{host\s+all\s+all\s+::1/128\s+md5}) }
 
-  its(:content) { should match(/host\s+public_db\s+bud\s+localhost\s*md5/) }
   its(:content) { should match(%r{host\s+public_db\s+bud\s+127\.0\.0\.1/32\s+md5}) }
   its(:content) { should match(/host\s+public_db\s+bud\s+db\.example\.com\s*md5/) }
 
-  its(:content) { should match(/host\s+large_db\s+bud\s+localhost\s*md5/) }
   its(:content) { should match(%r{host\s+large_db\s+bud\s+127\.0\.0\.1/32\s+md5}) }
   its(:content) { should match(/host\s+large_db\s+bud\s+db\.example\.com\s*md5/) }
 
-  its(:content) { should match(/host\s+large_db\s+sri\s+localhost\s*md5/) }
   its(:content) { should match(%r{host\s+large_db\s+sri\s+127\.0\.0\.1/32\s+md5}) }
 end

@@ -5,7 +5,7 @@ tcb = 'database_application'
 node[tcb]['database']['users'].each do |username, user_hash|
   next if username == 'root' # We do not create the root user; password is set during server install
 
-  hosts_for_user(user_hash).each do |host|
+  hosts_for_user('mariadb', user_hash).each do |host|
     mariadb_user "User #{username}@#{host}" do
       username username
       host host
@@ -31,7 +31,7 @@ node[tcb]['database']['mariadb'].each do |db_hash|
 
   db_hash['user_names'].each do |username|
     user_hash = node[tcb]['database']['users'][username]
-    hosts = hosts_for_user(user_hash)
+    hosts = hosts_for_user('mariadb', user_hash)
 
     hosts.each do |host|
       mariadb_user "Permissions for #{username}@#{host} on #{db_name}" do
@@ -54,7 +54,7 @@ node[tcb]['database']['postgresql'].each do |db_hash|
 
   db_hash['user_names'].each do |username|
     user_hash = node[tcb]['database']['users'][username]
-    hosts = hosts_for_user(user_hash)
+    hosts = hosts_for_user('postgresql', user_hash)
 
     hosts.each do |host|
       postgresql_access "Permissions for #{username}@#{host} on #{db_name}" do

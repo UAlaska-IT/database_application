@@ -17,16 +17,22 @@ module DatabaseApplication
       return node[TCB]['database']['postgresql'].any?
     end
 
-    def default_hosts
+    def default_host_list(db_type)
+      return node[TCB]['database']['mariadb_hosts'] if db_type == 'mariadb'
+
+      return node[TCB]['database']['postgresql_addresses']
+    end
+
+    def default_hosts(db_type)
       hosts = {}
-      node[TCB]['database']['hosts'].each do |host|
+      default_host_list(db_type).each do |host|
         hosts[host] = nil
       end
       return hosts
     end
 
-    def hosts_for_user(user_hash)
-      hosts = default_hosts
+    def hosts_for_user(db_type, user_hash)
+      hosts = default_hosts(db_type)
       if user_hash.key?('additional_hosts')
         user_hash['additional_hosts'].each do |host|
           hosts[host] = nil

@@ -163,7 +163,7 @@ User 'root' can be included to set a password for the root user, otherwise peer 
 Defaults to `{}`.
 The hash of username to attributes for all database users.
 A complete hash would look as below, but all attributes can be omitted.
-A user is always granted access to sources listed in `node['database_application']['database']['hosts']`;
+A user is always granted access to default sources;
 additional hosts can be added here.
 In addition to defaults for vault_data_bag and vault_bag_item below, vault_item_key will default to username.
 ```ruby
@@ -213,17 +213,25 @@ and the listed users will be granted full privileges on that database from all h
 
 Minimum access for all databases is specified in one attribute.
 
-* `node['database_application']['database']['hosts']`.
+* `node['database_application']['database']['mariadb_hosts']`.
 Defaults to
 ```ruby
 [
   'localhost',
   '127.0.0.1',
+]
+```
+The default hosts from which all users can connect to MariaDB.
+If remote access is desired, the FQDN of the server is typically appended to this list.
+
+* `node['database_application']['database']['postgresql_addresses']`.
+Defaults to
+```ruby
+[
   '127.0.0.1/32',
 ]
 ```
-The default hosts allowed for all users.
-This list encompasses both grants in MariaDB and addresses in PostgreSQL, so contains some redundancies for either.
+The default addresses from which all users can connect to PostgeSQL.
 If remote access is desired, the FQDN of the server is typically appended to this list.
 
 ### backup

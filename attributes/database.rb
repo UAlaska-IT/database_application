@@ -16,9 +16,11 @@ default[tcb]['database']['users'] = {}
 default[tcb]['database']['mariadb'] = []
 default[tcb]['database']['postgresql'] = []
 
-default[tcb]['database']['hosts'] = [
+default[tcb]['database']['mariadb_hosts'] = [
   'localhost',
   '127.0.0.1',
+]
+default[tcb]['database']['postgresql_addresses'] = [
   '127.0.0.1/32',
 ]
 default[tcb]['database']['user_pw']['vault_data_bag'] = 'passwords'

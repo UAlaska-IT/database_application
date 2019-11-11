@@ -219,10 +219,10 @@ If remote access is desired, the FQDN of the server is typically appended to thi
 
 If configured, backup files are compressed, timestamped, and then copied to the 'latest' revision.
 Thus two artifacts are created,
-backup\_{mariadb, postgresql}\_{db_name}\_{TIMESTAMP}.sql.7z and
+backup\_{mariadb, postgresql}\_{db_name}\_{timestamp}.sql.7z and
 backup\_{mariadb, postgresql}\_{db_name}\_latest.sql.7z.
 Both files are copied to S3 if configured to do so.
-The timestamped file may be deleted if configured to do so.
+The local timestamped file may be deleted if configured to do so.
 
 * `node['database_application']['backup']['directory']`.
 Defaults to `'/var/opt/database_application/backups'`.
@@ -239,7 +239,7 @@ Defaults to `'*'`.
 The day of the month to perform backups, starting at 0.
 
 * `node['database_application']['backup']['hour']`.
-Defaults to `'4'`.
+Defaults to `'6'`.
 The hour at which backups are performed.
 Time is in UTC.
 

@@ -54,4 +54,6 @@ suites:
     attributes:
     includes:
       - ubuntu-18.04
+      - debian-9
       - centos-7
+      - sles-15

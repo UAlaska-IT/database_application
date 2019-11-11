@@ -70,3 +70,8 @@ bash 'Install AWS CLI' do
   not_if 'pip3 list | grep awscli'
   only_if { node[tcb]['configure_backup'] }
 end
+
+# Missing on debian
+package 'dirmngr' do
+  only_if { platform_family?('debian') }
+end

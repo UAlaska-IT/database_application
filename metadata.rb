@@ -13,7 +13,8 @@ issues_url "#{git_url}/issues"
 version '0.1.0'
 
 supports 'ubuntu'
-# supports 'debian'
+supports 'debian'
+supports 'redhat'
 supports 'centos'
 # supports 'amazon'
 supports 'suse'

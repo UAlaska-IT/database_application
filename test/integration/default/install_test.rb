@@ -54,3 +54,10 @@ describe bash('pip3 list') do
   # its(:stderr) { should eq '' }
   its(:stdout) { should match 'awscli' }
 end
+
+describe package 'dirmngr' do
+  it { should be_installed }
+  before do
+    skip unless node['platform_family'] == 'debian'
+  end
+end

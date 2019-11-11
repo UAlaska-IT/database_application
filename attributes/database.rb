@@ -6,7 +6,7 @@ default[tcb]['mariadb']['db_collation'] = 'utf8_general_ci'
 default[tcb]['mariadb']['db_encoding'] = 'utf8'
 
 default[tcb]['postgresql']['db_locale'] =
-  if platform_family?('debian')
+  if platform?('ubuntu')
     'C.UTF-8'
   else
     'en_US.UTF-8'

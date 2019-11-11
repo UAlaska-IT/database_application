@@ -8,7 +8,7 @@ mariadb_server_install 'Server' do
   only_if { mariadb_server? }
 end
 
-# Enable needed for CentOS
+# Enable needed for RHEL
 service 'mariadb' do
   action [:start, :enable]
 end
@@ -35,7 +35,7 @@ bash 'Initialize PostgreSQL' do
   not_if { platform_family?('debian') }
 end
 
-# Enable needed for CentOS
+# Enable needed for RHEL
 service 'postgresql' do
   extend PostgresqlCookbook::Helpers
   service_name(lazy { platform_service_name })

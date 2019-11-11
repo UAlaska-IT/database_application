@@ -62,6 +62,7 @@ Supported Platform Families:
 Platforms validated via Test Kitchen:
 
 * Ubuntu
+* Debian
 * CentOS
 * Suse
 

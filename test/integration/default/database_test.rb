@@ -46,7 +46,6 @@ end
 
 mariadb_dbs.each do |db_hash|
   db_hash['user_names'].each do |user|
-    user_hash = users_hash[user]
     hosts_for_user(user).each do |host|
       describe bash "mysql -e 'show grants for #{user}@#{host};'" do
         its(:exit_status) { should eq 0 }

@@ -1,16 +1,6 @@
 ---
 driver:
-  name: ec2
-  region: us-west-1
-  instance_type: t3a.micro
-  security_group_ids: ['kitchen_test_sg']
-  tags:
-    Name: Database Application
-    Service: Infrastructure
-    Environment: Test
-    Fund: 103010
-    Org: 60412
-    Department: Systems Engineering
+  name: vagrant
 
 provisioner:
   name: chef_zero
@@ -58,6 +48,4 @@ suites:
     attributes:
     includes:
       - ubuntu-18.04
-      - debian-9
       - centos-7
-      - fedora-30

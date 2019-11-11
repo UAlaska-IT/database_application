@@ -22,13 +22,6 @@ postgresql_server_install 'Server' do
   only_if { postgresql_server? }
 end
 
-# Enable needed for CentOS
-service 'postgresql' do
-  extend PostgresqlCookbook::Helpers
-  service_name(lazy { platform_service_name })
-  action :enable
-end
-
 code = <<~CODE
   /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup initdb
   /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup upgrade
@@ -39,7 +32,14 @@ bash 'Initialize PostgreSQL' do
   code code
   action :nothing
   subscribes :run, 'postgresql_server_install[Server]', :immediate
-  only_if { platform_family?('rhel') }
+  not_if { platform_family?('debian') }
+end
+
+# Enable needed for CentOS
+service 'postgresql' do
+  extend PostgresqlCookbook::Helpers
+  service_name(lazy { platform_service_name })
+  action [:start, :enable]
 end
 
 mariadb_server_configuration 'Configuration' do

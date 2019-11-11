@@ -57,11 +57,13 @@ Supported Platform Families:
   * Ubuntu, Mint
 * Red Hat Enterprise Linux
   * Amazon, CentOS, Oracle
+* Suse
 
 Platforms validated via Test Kitchen:
 
 * Ubuntu
 * CentOS
+* Suse
 
 ### Dependencies
 

@@ -33,7 +33,7 @@ describe file cron_file do
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
   its(:content) { should match(%r{SHELL=/bin/bash}) }
-  its(:content) { should match('\* 4 \* \* 0 root /var/chef/database_application_backup\.sh') }
+  its(:content) { should match('\* 6 \* \* 0 root /var/chef/database_application_backup\.sh') }
 end
 
 time_stamp = Time.now.utc.strftime('%Y_%m_%d_%H')

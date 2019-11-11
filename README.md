@@ -31,13 +31,14 @@ Limitations:
 
 Bottom line, this cookbook provides cheap, backed-up databases for lightly-used applications that require the existence of a database,
 but are not sensitive to resources or tuning.
+It also supports transient database servers that can be re-created with minimal effort.
 
 The firewall can be configured for remote access, or not for local databases.
 
 Automated dumps can be setup, as well as automated remote backup to AWS S3.
 For remote backup to succeed, the node must be configured with an instance profile that provides S3 put privileges for the indicated bucket.
 
-A recovery recipe is included and will recover up to all databases, possibly from S3..
+A recovery recipe is included and will recover up to all databases, possibly from S3.
 If a local backup exists, it will be used.
 For recovery to succeed on a new node that does not have local backups available,
 the node must be configured with an instance profile that provides S3 get privileges for the indicated bucket.
@@ -263,7 +264,7 @@ For example, `'my-bucket/db-backups'`.
 ### restore
 
 An attribute controls the databases to restore for each server.
-If non-nil, only those databases will be restored.
+If non-nil, only those databases in the list will be restored.
 Otherwise, all databases will be restored.
 
 * `node['database_application']['restore']['database']['mariadb']`.
@@ -277,7 +278,7 @@ Defaults to `nil`.
 This is an application cookbook; no custom resources are provided.
 See recipes and attributes for details of what this cookbook does.
 
-A sample client cookbook that demonstrates most features of this cookbook can be found at test/fixtures/cookbooks/test_harness.
+A sample client cookbook that demonstrates features of this cookbook can be found at test/fixtures/cookbooks/test_harness.
 
 ## Development
 

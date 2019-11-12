@@ -8,11 +8,6 @@ mariadb_server_install 'Server' do
   only_if { mariadb_server? }
 end
 
-# Enable needed for RHEL
-service 'mariadb' do
-  action [:start, :enable]
-end
-
 psql_ver = node[tcb]['postgresql_version']
 
 postgresql_server_install 'Server' do
@@ -21,13 +16,11 @@ postgresql_server_install 'Server' do
   version psql_ver if psql_ver
   only_if { postgresql_server? }
 end
-
 code = <<~CODE
   /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup initdb
   /usr/pgsql-#{psql_ver}/bin/postgresql-#{psql_ver}-setup upgrade
   systemctl restart postgresql-#{psql_ver}
 CODE
-
 bash 'Initialize PostgreSQL' do
   code code
   action :nothing
@@ -36,10 +29,16 @@ bash 'Initialize PostgreSQL' do
 end
 
 # Enable needed for RHEL
+service 'mariadb' do
+  action [:start, :enable]
+  only_if { mariadb_server? }
+end
+
 service 'postgresql' do
   extend PostgresqlCookbook::Helpers
   service_name(lazy { platform_service_name })
   action [:start, :enable]
+  only_if { postgresql_server? }
 end
 
 mariadb_server_configuration 'Configuration' do

@@ -12,7 +12,7 @@ end
 idempotence_file id_tag
 
 # Compensate for the king-of-snowflakes distro
-include_recipe 'yum-epel::default' unless platform?('fedora')
+include_recipe 'yum-epel::default' unless platform_family?('fedora')
 
 mariadb_file = '/var/chef/idempotence/database_application_mariadb_version'
 

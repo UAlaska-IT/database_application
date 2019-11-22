@@ -36,7 +36,7 @@ end
 describe bash 'psql --version' do
   its(:exit_status) { should eq 0 }
   its(:stderr) { should eq '' }
-  its(:stdout) { should match(/12\.0/) }
+  its(:stdout) { should match(/12\.1/) }
 end
 
 describe service 'mariadb' do

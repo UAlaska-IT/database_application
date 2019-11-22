@@ -301,7 +301,7 @@ Defaults to `nil`.
 This is an application cookbook; no custom resources are provided.
 See recipes and attributes for details of what this cookbook does.
 
-A sample client cookbook that demonstrates features of this cookbook can be found at test/fixtures/cookbooks/test_harness.
+A sample client cookbook that demonstrates features of this cookbook can be found at test/cookbooks/test_harness.
 
 ## Development
 

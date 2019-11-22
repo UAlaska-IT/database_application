@@ -2,6 +2,6 @@
 
 rubocop
 foodcritic .
-foodcritic test/fixtures/cookbooks/test_harness
+foodcritic test/cookbooks/test_harness
 cookstyle .
-cookstyle test/fixtures/cookbooks/test_harness
+cookstyle test/cookbooks/test_harness

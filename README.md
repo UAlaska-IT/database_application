@@ -1,5 +1,9 @@
 # Database Application Cookbook
 
+[![License](https://img.shields.io/github/license/ualaska-it/database_application.svg)](https://github.com/ualaska-it/database_application)
+[![GitHub Tag](https://img.shields.io/github/tag/ualaska-it/database_application.svg)](https://github.com/ualaska-it/database_application)
+[![Build status](https://ci.appveyor.com/api/projects/status/7a6rsooq80lxmw3j/branch/master?svg=true)](https://ci.appveyor.com/project/UAlaska/database-application/branch/master)
+
 __Maintainer: OIT Systems Engineering__ (<ua-oit-se@alaska.edu>)
 
 ## Purpose

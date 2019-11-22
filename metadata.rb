@@ -12,11 +12,11 @@ issues_url "#{git_url}/issues"
 
 version '0.1.0'
 
-supports 'ubuntu'
-supports 'debian'
-supports 'redhat'
-supports 'centos'
-supports 'oracle'
+supports 'ubuntu', '>= 16.0'
+supports 'debian', '>= 9.0'
+supports 'redhat', '>= 7.0'
+supports 'centos', '>= 7.0'
+supports 'oracle', '>= 7.0'
 supports 'fedora'
 # supports 'amazon'
 # supports 'suse'

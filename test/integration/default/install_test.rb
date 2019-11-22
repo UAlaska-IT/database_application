@@ -6,7 +6,8 @@ node = json('/opt/chef/run_record/last_chef_run_node.json')['automatic']
 
 describe bash('yum repolist') do
   its(:exit_status) { should eq 0 }
-  its(:stderr) { should eq '' }
+  # bento box has wonky locale
+  its(:stderr) { should eq '' } unless node['platform'] == 'centos' && node['platform_version'].to_f < 8.0
   its(:stdout) { should match 'epel/x86_64' }
   before do
     skip if node['platform_family'] == 'debian'

@@ -47,15 +47,8 @@ postgre_service =
     'postmaster'
   end
 
-postgre_protocols =
-  if node['platform_family'] == 'debian'
-    ['tcp']
-  else
-    ['tcp', 'tcp6']
-  end
-
 describe port(5432) do
   it { should be_listening }
   its('processes') { should eq [postgre_service] }
-  its('protocols') { should eq postgre_protocols }
+  its('protocols') { should include('tcp') }
 end

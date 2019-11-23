@@ -129,8 +129,16 @@ The version of PostgreSQL to install.
 ### server
 
 * `node['database_application']['postgresql']['server_locale']`.
-Defaults to `'C.UTF-8'`.
+Defaults to `'en_US.UTF-8'` for all platforms except Ubuntu.
 The locale for the master database.
+
+For Ubuntu, the locale must be the same as for the system template database ([Issue](https://github.com/sous-chefs/postgresql/issues/555)).
+The correct locale can vary even between Ubuntu images.
+It is easy to figure out the correct locale from a failed Chef run.
+Sample Chef output below states the correct locale for one system.
+```bash
+STDERR: createdb: error: database creation failed: ERROR:  new collation (C.UTF-8) is incompatible with the collation of the template database (en_US.UTF-8)
+```
 
 Which database servers to install is inferred from database attributes.
 

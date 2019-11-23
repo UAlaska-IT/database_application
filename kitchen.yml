@@ -3,7 +3,6 @@ driver:
   name: ec2
   region: us-west-1
   instance_type: t3a.micro
-  security_group_ids: ['kitchen_test_sg']
   tags:
     Name: Database Application
     Service: Infrastructure
